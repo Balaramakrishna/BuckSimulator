@@ -1,6 +1,6 @@
 # BuckSimulator
 Based on : http://shodhganga.inflibnet.ac.in:8080/jspui/handle/10603/56573  
-Credits: Laveen Vikram Sundararaj.  
+Credits: Laveen Vikram Sundararaj  (https://www.linkedin.com/in/laveen-sundararaj-ph-d-142066bb).  
 Migrated to Java by: Balaramakrishna
 
 Bucksimulator is a reaserch project developed by Laveen Vikram Sundararaj during his PhD.
