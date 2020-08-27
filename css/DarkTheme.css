@@ -1,0 +1,161 @@
+.root { 
+    -fx-accent: #1e74c6;
+    -fx-focus-color: -fx-accent;
+    -fx-base: #373e43;
+    -fx-control-inner-background: derive(-fx-base, 35%);
+    -fx-control-inner-background-alt: -fx-control-inner-background ;
+}
+
+.label{
+    -fx-text-fill: white;
+}
+
+.label1{
+    -fx-text-fill: #4cae0f;
+}
+
+.text-field {
+    -fx-prompt-text-fill: gray;
+}
+
+.titulo{
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+.button{
+    -fx-focus-traversable: false;
+}
+
+.button:hover{
+    -fx-text-fill: white;
+}
+
+.separator *.line { 
+    -fx-background-color: #3C3C3C;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+}
+
+.scroll-bar{
+    -fx-background-color: derive(-fx-base,45%)
+}
+
+.button:default {
+    -fx-base: -fx-accent ;
+} 
+
+.tree-table-view,
+.table-view{
+    -fx-selection-bar-non-focused: steelblue;
+    -fx-selection-bar: steelblue;
+}
+
+.table-view .column-header .label{
+    -fx-font-weight: none;
+}
+
+.tree-table-row-cell:even,
+.table-row-cell:even{
+    -fx-control-inner-background: derive(-fx-base, 55%);
+}
+.tree-table-row-cell:odd,
+.table-row-cell:odd{    
+    -fx-control-inner-background: derive(-fx-base, 35%);
+}
+
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.tree-table-cell{
+    -fx-text-fill: white;
+}
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.tab-pane{
+    -fx-tab-max-height:0;
+}
+.tab-pane .tab-header-area{
+    visibility:hidden;
+    -fx-padding: 0 0 0 0;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #999999;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #999999;
+}
+.chart-vertical-zero-line {
+    -fx-stroke: #999999;
+}
+.chart-horizontal-zero-line {
+    -fx-stroke: #999999;
+}
+.chart-title {
+  -fx-font-size: 1em;
+}
+.pane-background {
+    -fx-background-image: url("BlackBuck_1.png");
+    -fx-background-size: stretch;
+    -fx-opacity: 0.25;
+    -fx-padding: 0 0 0 0;
+}
+.check-box .box {
+    -fx-background-color: grey;
+    -fx-border-color:white;
+    -fx-border-radius:1px; 
+
+}
+.default-color0.chart-symbol { /* solid circle */
+    -fx-background-color: #f51708;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color1.chart-symbol { /* solid square */
+    -fx-background-color: #ec7b0a;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color2.chart-symbol { /* solid diamond */
+    -fx-background-color: #f6e808;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color3.chart-symbol { /* cross */
+    -fx-background-color: #62d807;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color4.chart-symbol { /* solid triangle */
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color5.chart-symbol { /* hollow circle */
+    -fx-background-color: #1d86f7;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color6.chart-symbol { /* hollow square */
+    -fx-background-color: #bb81cb;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color7.chart-symbol { /* hollow diamond */
+    -fx-background-color: #f71da1;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+

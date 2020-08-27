@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="topLevelAnchorPane" onKeyPressed="#saveChart" onKeyReleased="#resetChartZoom" onScroll="#toggleCharts" prefHeight="513.0" prefWidth="706.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bucksimulator.controller.SimController">
+   <children>
+      <MenuBar fx:id="menuBar" prefHeight="29.0" prefWidth="706.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem fx:id="startAllSimsMI" mnemonicParsing="false" onAction="#startSimulation" text="Start All Sims" />
+                  <MenuItem fx:id="pauseAllSimsMI" mnemonicParsing="false" onAction="#pauseSimulation" text="Pause All Sims" />
+                  <MenuItem fx:id="stopAllSimsMI" mnemonicParsing="false" onAction="#stopSimulation" text="Stop All Sims" />
+                  <MenuItem fx:id="resumeAllSimsMI" mnemonicParsing="false" onAction="#resumeSimulation" text="Resume All Sims" />
+                  <Menu fx:id="exportSimDataMenu" mnemonicParsing="false" text="Export Sim Data To Txt">
+                    <items>
+                      <MenuItem fx:id="cthExportMI" mnemonicParsing="false" onAction="#exportCTHSimData" text="Capture Time Hide" visible="false" />
+                        <MenuItem fx:id="escExportMI" mnemonicParsing="false" onAction="#exportESCSimData" text="Epedemic Single Copy" visible="false" />
+                        <MenuItem fx:id="emcExportMI" mnemonicParsing="false" onAction="#exportEMCSimData" text="Epedemic Multi Copy" visible="false" />
+                        <MenuItem fx:id="emtExportMI" mnemonicParsing="false" onAction="#exportEMTSimData" text="Expected Meeting Time" visible="false" />
+                        <MenuItem fx:id="gtrExportMI" mnemonicParsing="false" onAction="#exportGTRSimData" text="Game Theory Routing" visible="false" />
+                        <MenuItem fx:id="prExportMI" mnemonicParsing="false" onAction="#exportPRSimData" text="Prophet Routing" />
+                        <MenuItem fx:id="nprExportMI" mnemonicParsing="false" onAction="#exportNPRSimData" text="New Prophet Routing" />
+                    </items>
+                  </Menu>
+                  <Menu fx:id="saveIndividualSimDataToDBM" mnemonicParsing="false" text="Save Sim Data To DB">
+                    <items>
+                      <MenuItem fx:id="cthDBMI" mnemonicParsing="false" onAction="#saveCTHSimData" text="Capture Time Hide" />
+                        <MenuItem fx:id="escDBMI" mnemonicParsing="false" onAction="#saveESCSimData" text="Epedemic Single Copy" />
+                        <MenuItem fx:id="emcDBMI" mnemonicParsing="false" onAction="#saveEMCSimData" text="Epedemic Multi Copy" />
+                        <MenuItem fx:id="emtDBMI" mnemonicParsing="false" onAction="#saveEMTSimData" text="Expected Meeting Time" />
+                        <MenuItem fx:id="gtrDBMI" mnemonicParsing="false" onAction="#saveGTRSimData" text="Game Theory Routing" />
+                        <MenuItem fx:id="prDBMI" mnemonicParsing="false" onAction="#savePRSimData" text="Prophet Routing" />
+                        <MenuItem fx:id="nprDBMI" mnemonicParsing="false" onAction="#saveNPRSimData" text="New Prophet Routing" />
+                    </items>
+                  </Menu>
+              <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="Close" />
+            </items>
+          </Menu>
+            <Menu fx:id="viewMenu" mnemonicParsing="false" text="View">
+              <items>
+                  <Menu fx:id="cthViewMI" mnemonicParsing="false" text="Capture Time Hide">
+                    <items>
+                      <MenuItem fx:id="gpsLiveCTHMI" mnemonicParsing="false" onAction="#showGPSLiveViewCTH" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogCTHMI" mnemonicParsing="false" onAction="#showGPSLogViewCTH" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showCTHGpsDataTable" text="GPS Live data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                          <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewCTH" text="X-Y" />
+                            <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewCTH" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewCTH" text="Y-GT" />
+                          </items>
+                        </Menu>
+                        <MenuItem fx:id="tpCTHMI" mnemonicParsing="false" onAction="#showThroughputCTH" text="Throughput" />
+                        <MenuItem fx:id="dcCTHMI" mnemonicParsing="false" onAction="#showDataCenterCTH" text="Data Center" />
+                    </items>
+                  </Menu>
+                  <Menu fx:id="escViewMI" mnemonicParsing="false" text="Epedemic Single Copy">
+                    <items>
+                        <MenuItem fx:id="gpsLiveESCMI" mnemonicParsing="false" onAction="#showGPSLiveViewESC" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogESCMI" mnemonicParsing="false" onAction="#showGPSLogViewESC" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showESCGpsDataTable" text="GPS Live Data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewESC" text="X-Y" />
+                              <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewESC" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewESC" text="Y-GT" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="tpESCMI" mnemonicParsing="false" onAction="#showThroughputESC" text="Throughput" />
+                        <MenuItem fx:id="dcESCMI" mnemonicParsing="false" onAction="#showDataCenterESC" text="Data Center" />
+                    </items>
+                  </Menu>
+                  <Menu fx:id="emcViewMI" mnemonicParsing="false" text="Epedemic Multi Copy">
+                     <items>
+                        <MenuItem fx:id="gpsLiveEMCMI" mnemonicParsing="false" onAction="#showGPSLiveViewEMC" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogEMCMI" mnemonicParsing="false" onAction="#showGPSLogViewEMC" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showEMCGpsDataTable" text="GPS Live Data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewEMC" text="X-Y" />
+                              <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewEMC" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewEMC" text="Y-GT" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="tpEMCMI" mnemonicParsing="false" onAction="#showThroughputEMC" text="Throughput" />
+                        <MenuItem fx:id="dcEMCMI" mnemonicParsing="false" onAction="#showDataCenterEMC" text="Data Center" />
+                     </items>
+                  </Menu>
+                  <Menu fx:id="emtViewMI" mnemonicParsing="false" text="Expected Meeting Time">
+                    <items>
+                        <MenuItem fx:id="gpsLiveEMTMI" mnemonicParsing="false" onAction="#showGPSLiveViewEMT" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogEMTMI" mnemonicParsing="false" onAction="#showGPSLogViewEMT" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showEMTGpsDataTable" text="GPS Live Data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewEMT" text="X-Y" />
+                              <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewEMT" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewEMT" text="Y-GT" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="tpEMTMI" mnemonicParsing="false" onAction="#showThroughputEMT" text="Throughput" />
+                        <MenuItem fx:id="dcEMTMI" mnemonicParsing="false" onAction="#showDataCenterEMT" text="Data Center" />
+                    </items>
+                  </Menu>
+                  <Menu fx:id="gtrViewMI" mnemonicParsing="false" text="Game Theory Routing">
+                     <items>
+                        <MenuItem fx:id="gpsLiveGTRMI" mnemonicParsing="false" onAction="#showGPSLiveViewGTR" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogGTRMI" mnemonicParsing="false" onAction="#showGPSLogViewGTR" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showGTRGpsDataTable" text="GPS Live Data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewGTR" text="X-Y" />
+                              <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewGTR" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewGTR" text="Y-GT" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="tpGTRMI" mnemonicParsing="false" onAction="#showThroughputGTR" text="Throughput" />
+                        <MenuItem fx:id="dcGTRMI" mnemonicParsing="false" onAction="#showDataCenterGTR" text="Data Center" />
+                     </items>
+                  </Menu>
+                  <Menu fx:id="prViewMI" mnemonicParsing="false" text="Prophet Routing">
+                     <items>
+                        <MenuItem fx:id="gpsLivePRMI" mnemonicParsing="false" onAction="#showGPSLiveViewPR" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogPRMI" mnemonicParsing="false" onAction="#showGPSLogViewPR" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showPRGpsDataTable" text="GPS Live Data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewPR" text="X-Y" />
+                              <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewPR" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewPR" text="Y-GT" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="tpPRMI" mnemonicParsing="false" onAction="#showThroughputPR" text="Throughput" />
+                        <MenuItem fx:id="dcPRMI" mnemonicParsing="false" onAction="#showDataCenterPR" text="Data Center" />
+                     </items>
+                  </Menu>
+                  <Menu fx:id="nprViewMI" mnemonicParsing="false" text="New Prophet Routing">
+                    <items>
+                        <MenuItem fx:id="gpsLiveNPRMI" mnemonicParsing="false" onAction="#showGPSLiveViewNPR" text="GPS Live Chart" />
+                        <MenuItem fx:id="gpsLogNPRMI" mnemonicParsing="false" onAction="#showGPSLogViewNPR" text="GPS Log Chart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showNPRGpsDataTable" text="GPS Live Data" />
+                        <Menu mnemonicParsing="false" text="Radio Contact Log">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#showXYRCLViewNPR" text="X-Y" />
+                              <MenuItem mnemonicParsing="false" onAction="#showXTRCLViewNPR" text="X-GT" />
+                              <MenuItem mnemonicParsing="false" onAction="#showYTRCLViewNPR" text="Y-GT" />
+                           </items>
+                        </Menu>
+                        <MenuItem fx:id="tpNPRMI" mnemonicParsing="false" onAction="#showThroughputNPR" text="Throughput" />
+                        <MenuItem fx:id="dcNPRMI" mnemonicParsing="false" onAction="#showDataCenterNPR" text="Data Center" />
+                    </items>
+                  </Menu>
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Simulations">
+            <items>
+                  <Menu mnemonicParsing="false" text="Capture Time Hide">
+                    <items>
+                      <MenuItem fx:id="startCTHMI" mnemonicParsing="false" onAction="#startCaptureTimeHideSim" text="Start" />
+                        <MenuItem fx:id="stopCTHMI" mnemonicParsing="false" onAction="#stopCaptureTimeHideSim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pauseCTHMI" mnemonicParsing="false" onAction="#pauseResumeCTHSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumeCTHMI" mnemonicParsing="false" onAction="#pauseResumeCTHSim" text="Resume" visible="false" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Epedemic Single Copy">
+                    <items>
+                      <MenuItem fx:id="startESCMI" mnemonicParsing="false" onAction="#startEpidemicSingleCopySim" text="Start" />
+                        <MenuItem fx:id="stopESCMI" mnemonicParsing="false" onAction="#stopEpidemicSingleCopySim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pauseESCMI" mnemonicParsing="false" onAction="#pauseResumeESCSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumeESCMI" mnemonicParsing="false" onAction="#pauseResumeESCSim" text="Resume" visible="false" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Epedemic Multi Copy">
+                    <items>
+                      <MenuItem fx:id="startEMCMI" mnemonicParsing="false" onAction="#startEpidemicMultiCopySim" text="Start" />
+                        <MenuItem fx:id="stopEMCMI" mnemonicParsing="false" onAction="#stopEpidemicMultiCopySim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pauseEMCMI" mnemonicParsing="false" onAction="#pauseResumeEMCSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumeEMCMI" mnemonicParsing="false" onAction="#pauseResumeEMCSim" text="Resume" visible="false" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Expected Meeting Time">
+                    <items>
+                        <MenuItem fx:id="startEMTMI" mnemonicParsing="false" onAction="#startExpectedMeetingtimeSim" text="Start" />
+                        <MenuItem fx:id="stopEMTMI" mnemonicParsing="false" onAction="#stopExpectedMeetingtimeSim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pauseEMTMI" mnemonicParsing="false" onAction="#pauseResumeEMTSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumeEMTMI" mnemonicParsing="false" onAction="#pauseResumeEMTSim" text="Resume" visible="false" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Game Theory Routing">
+                     <items>
+                        <MenuItem fx:id="startGTRMI" mnemonicParsing="false" onAction="#startGameTheoryRoutingSim" text="Start" />
+                        <MenuItem fx:id="stopGTRMI" mnemonicParsing="false" onAction="#stopGameTheoryRoutingSim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pauseGTRMI" mnemonicParsing="false" onAction="#pauseResumeGTRSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumeGTRMI" mnemonicParsing="false" onAction="#pauseResumeGTRSim" text="Resume" visible="false" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Prophet Routing">
+                    <items>
+                      <MenuItem fx:id="startPRMI" mnemonicParsing="false" onAction="#startProphetRoutingSim" text="Start" />
+                        <MenuItem fx:id="stopPRMI" mnemonicParsing="false" onAction="#stopProphetRoutingSim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pausePRMI" mnemonicParsing="false" onAction="#pauseResumePRSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumePRMI" mnemonicParsing="false" onAction="#pauseResumePRSim" text="Resume" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="New Prophet Routing">
+                    <items>
+                      <MenuItem fx:id="startNPRMI" mnemonicParsing="false" onAction="#startNewProphetRoutingSim" text="Start" />
+                        <MenuItem fx:id="stopNPRMI" mnemonicParsing="false" onAction="#stopNewProphetRoutingSim" text="Stop" visible="false" />
+                        <MenuItem fx:id="pauseNPRMI" mnemonicParsing="false" onAction="#pauseResumeNPRSim" text="Pause" visible="false" />
+                        <MenuItem fx:id="resumeNPRMI" mnemonicParsing="false" onAction="#pauseResumeNPRSim" text="Resume" />
+                    </items>
+                  </Menu>
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" onMenuValidation="#validateReportsMenu" text="Reports">
+              <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showSimStatus" text="Progress" />
+                  <MenuItem fx:id="packetTallyMI" disable="true" mnemonicParsing="false" onAction="#showPacketTally" text="Packet Tally" />
+                <MenuItem fx:id="rcrMI" disable="true" mnemonicParsing="false" onAction="#showRadioContactRatioChart" text="Radio Contact Ratio Comparision" />
+                  <Menu fx:id="tpCompareMI" disable="true" mnemonicParsing="false" text="Throughput Comparision">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#showThroughputCompareChart" text="Barchart" />
+                        <MenuItem mnemonicParsing="false" onAction="#showThroughputCompareChartLC" text="Linechart" />
+                     </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#showDatabaseLog" text="Database Report" />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" onAction="#validatePreferences" text="Preferences">
+              <items>
+                  <RadioMenuItem fx:id="fullScreenMI" mnemonicParsing="false" onAction="#setFullScreen" text="Full Screen" />
+                  <RadioMenuItem fx:id="darkTheme" mnemonicParsing="false" onAction="#toggleTheme" text="Dark Theme" />
+                  <RadioMenuItem fx:id="autoSaveDBMI" mnemonicParsing="false" onAction="#autoSaveSimDataToDB" text="Auto Save Sim Data to DB" />
+                  <Menu mnemonicParsing="false" text="Popout Charts">
+                    <items>
+                      <RadioMenuItem fx:id="popoutCTHChartsMI" mnemonicParsing="false" onAction="#popoutCTHCharts" text="Capture Time Hide" />
+                        <RadioMenuItem fx:id="popoutESCChartsMI" mnemonicParsing="false" onAction="#popoutESCCharts" text="Epedemic Single Copy" />
+                        <RadioMenuItem fx:id="popoutEMCChartsMI" mnemonicParsing="false" onAction="#popoutEMCCharts" text="Epedemic Multi Copy" />
+                        <RadioMenuItem fx:id="popoutEMTChartsMI" mnemonicParsing="false" onAction="#popoutEMTCharts" text="Expected Meeting Time" />
+                        <RadioMenuItem fx:id="popoutGTRChartsMI" mnemonicParsing="false" onAction="#popoutGTRCharts" text="Game Theory Routing" />
+                        <RadioMenuItem fx:id="popoutPRChartsMI" mnemonicParsing="false" onAction="#popoutPRCharts" text="Prophet Routing" />
+                        <RadioMenuItem fx:id="popoutNPRChartsMI" mnemonicParsing="false" onAction="#popoutNPRCharts" text="New Prophet Routing" />
+                        <CheckMenuItem fx:id="popoutAllChartsMI" mnemonicParsing="false" onAction="#popoutAllCharts" text="All" visible="false" />
+                    </items>
+                  </Menu>
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#showAboutInfo" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <TabPane fx:id="masterTabPane" layoutX="4.0" layoutY="29.0" prefHeight="481.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="29.0">
+        <tabs>
+            <Tab fx:id="startScreenTab" text="Start Screen">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="startScreenText" alignment="CENTER" layoutX="80.0" layoutY="120.0" text="Buck Simulator" textAlignment="CENTER" textFill="#4cae0f" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <font>
+                              <Font name="System Bold" size="64.0" />
+                           </font>
+                           <effect>
+                              <Glow level="0.67" />
+                           </effect>
+                        </Label>
+                        <Pane fx:id="startScreen" layoutX="-6.0" prefHeight="452.0" prefWidth="712.0" style="-fx-border-width: 0.0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <effect>
+                              <Bloom />
+                           </effect></Pane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+          <Tab fx:id="gpsLiveTab" onSelectionChanged="#removeStartScreenTab" text="GPS Live">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScatterChart fx:id="gpsLiveChart" alternativeColumnFillVisible="true" animated="false" focusTraversable="true" prefHeight="431.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <xAxis>
+                            <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" />
+                          </xAxis>
+                        <yAxis>
+                          <NumberAxis animated="false" autoRanging="false" layoutX="10.0" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+                        </yAxis>
+                        </ScatterChart>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="rclTab" text="Radio Contact Log">
+              <content>
+                <AnchorPane fx:id="rclAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScatterChart fx:id="radioContactLogChart" animated="false" layoutX="14.0" layoutY="14.0" legendVisible="false" mouseTransparent="true" onMouseDragged="#setZoomSize" onMouseMoved="#addTooltipsForChart" onMousePressed="#setZoomStartLocation" onMouseReleased="#zoomChart" prefHeight="403.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <xAxis>
+                            <NumberAxis fx:id="rclXAxis" autoRanging="false" side="BOTTOM" tickUnit="1.0" upperBound="10.0" />
+                          </xAxis>
+                        <yAxis>
+                          <NumberAxis fx:id="rclYAxis" layoutX="10.0" side="LEFT" upperBound="120960.0" />
+                        </yAxis>
+                        </ScatterChart>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="throughputTab" text="Throughput">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BarChart fx:id="throughputChart" animated="false" legendVisible="false" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis autoRanging="false" label="Throughput %" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="dataCenterTab" text="Data Center">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScatterChart fx:id="dataCenterChart" animated="false" prefHeight="441.0" prefWidth="634.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="5.0">
+                          <xAxis>
+                            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" fx:id="xAxisDC" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="yAxisDC" autoRanging="false" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+                          </yAxis>
+                        </ScatterChart>
+                        <CheckBox fx:id="t1CBDC" layoutX="644.0" layoutY="30.0" mnemonicParsing="false" onAction="#t1DCChecked" pickOnBounds="false" snapToPixel="false" text="T1" AnchorPane.bottomAnchor="404.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0" />
+                        <CheckBox fx:id="t2CBDC" layoutX="644.0" layoutY="60.0" mnemonicParsing="false" onAction="#t2DCChecked" pickOnBounds="false" snapToPixel="false" text="T2" AnchorPane.bottomAnchor="370.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0" />
+                        <CheckBox fx:id="t3CBDC" layoutX="644.0" layoutY="90.0" mnemonicParsing="false" onAction="#t3DCChecked" pickOnBounds="false" snapToPixel="false" text="T3" AnchorPane.bottomAnchor="333.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="90.0" />
+                        <CheckBox fx:id="bhCBDC" layoutX="644.0" layoutY="120.0" mnemonicParsing="false" onAction="#bhDCChecked" pickOnBounds="false" snapToPixel="false" text="BH" AnchorPane.bottomAnchor="298.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="120.0" />
+                        <CheckBox fx:id="mhCBDC" layoutX="643.0" layoutY="150.0" mnemonicParsing="false" onAction="#mhDCChecked" pickOnBounds="false" snapToPixel="false" text="MH" AnchorPane.bottomAnchor="268.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="150.0" />
+                        <CheckBox fx:id="fhCBDC" layoutX="644.0" layoutY="180.0" mnemonicParsing="false" onAction="#fhDCChecked" pickOnBounds="false" snapToPixel="false" text="FH" AnchorPane.bottomAnchor="239.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="180.0" />
+                        <CheckBox fx:id="nfCBDC" layoutX="644.0" layoutY="210.0" mnemonicParsing="false" onAction="#nfDCChecked" pickOnBounds="false" snapToPixel="false" text="NF" AnchorPane.bottomAnchor="204.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="210.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="gpsLogTab" text="GPS Log">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ScatterChart fx:id="gpsLogChart" animated="false" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="5.0">
+                          <xAxis>
+                            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis autoRanging="false" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+                          </yAxis>
+                        </ScatterChart>
+                        <CheckBox fx:id="t1CBGL" layoutX="644.0" layoutY="30.0" mnemonicParsing="false" onAction="#t1GLChecked" pickOnBounds="false" snapToPixel="false" text="T1" AnchorPane.bottomAnchor="404.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0" />
+                        <CheckBox fx:id="t2CBGL" layoutX="644.0" layoutY="60.0" mnemonicParsing="false" onAction="#t2GLChecked" pickOnBounds="false" snapToPixel="false" text="T2" AnchorPane.bottomAnchor="370.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0" />
+                        <CheckBox fx:id="t3CBGL" layoutX="644.0" layoutY="90.0" mnemonicParsing="false" onAction="#t3GLChecked" pickOnBounds="false" snapToPixel="false" text="T3" AnchorPane.bottomAnchor="333.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="90.0" />
+                        <CheckBox fx:id="bhCBGL" layoutX="644.0" layoutY="120.0" mnemonicParsing="false" onAction="#bhGLChecked" pickOnBounds="false" snapToPixel="false" text="BH" AnchorPane.bottomAnchor="298.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="120.0" />
+                        <CheckBox fx:id="mhCBGL" layoutX="643.0" layoutY="150.0" mnemonicParsing="false" onAction="#mhGLChecked" pickOnBounds="false" snapToPixel="false" text="MH" AnchorPane.bottomAnchor="268.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="150.0" />
+                        <CheckBox fx:id="fhCBGL" layoutX="644.0" layoutY="180.0" mnemonicParsing="false" onAction="#fhGLChecked" pickOnBounds="false" snapToPixel="false" text="FH" AnchorPane.bottomAnchor="239.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="180.0" />
+                        <CheckBox fx:id="nfCBGL" layoutX="644.0" layoutY="210.0" mnemonicParsing="false" onAction="#nfGLChecked" pickOnBounds="false" snapToPixel="false" text="NF" AnchorPane.bottomAnchor="204.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="210.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="rcrTab" onSelectionChanged="#addLabelForRCRBars" text="Radio Contact Ratio">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BarChart fx:id="radioContactRatioChart" animated="false" legendVisible="false" title="Radiocontact Ratio Comparision" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <xAxis>
+                            <CategoryAxis autoRanging="false" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis label="Radio Contact Ratio %" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="throughputCompareTab" onSelectionChanged="#addLabelForTpCompareChart" text="Throughput Comparision">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <BarChart fx:id="throughputCompareChart" animated="false" title="Throughput Comparision" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <xAxis>
+                            <CategoryAxis animated="false" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis animated="false" autoRanging="false" label="Throughput %" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="throughputCompareTabLC" text="Throughput Comparision LC">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <LineChart fx:id="throughputCompareChartLC" animated="false" title="Throughput Comparision" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" upperBound="102.0" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="nodeDataTables" text="GPS Live Tables">
+               <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="tableTitle" alignment="CENTER" text="Label" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="20.0" prefHeight="428.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+                           <content>
+                              <HBox alignment="CENTER" snapToPixel="false">
+                                 <children>
+                                    <TableView fx:id="w1DataTable" minWidth="-Infinity" prefWidth="150.0" snapToPixel="false" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="150.0" sortable="false" text="W1">
+                                             <columns>
+                                                <TableColumn fx:id="w1xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="w1yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="nfDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="150.0" sortable="false" text="NF">
+                                             <columns>
+                                                <TableColumn fx:id="nfxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="nfyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="fhDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="150.0" sortable="false" text="FH">
+                                             <columns>
+                                                <TableColumn fx:id="fhxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="fhyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="mhDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="MH">
+                                             <columns>
+                                                <TableColumn fx:id="mhxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="mhyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="bhDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="BH">
+                                             <columns>
+                                                <TableColumn fx:id="bhxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="bhyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="t3DataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="T3">
+                                             <columns>
+                                                <TableColumn fx:id="t3xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="t3yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="t2DataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="T2">
+                                             <columns>
+                                                <TableColumn fx:id="t2xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="t2yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                    <TableView fx:id="t1DataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                       <columns>
+                                          <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="T1">
+                                             <columns>
+                                                <TableColumn fx:id="t1xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                                                <TableColumn fx:id="t1yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                                             </columns>
+                                          </TableColumn>
+                                       </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
+                                 </children>
+                              </HBox>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab fx:id="databaseReport" text="Database">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0">
+                     <children>
+                        <TableView fx:id="databaseTable" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn fx:id="dbAlgorithmName" editable="false" minWidth="150.0" prefWidth="150.0" text="Algorithm Name" />
+                            <TableColumn fx:id="dbRunDate" editable="false" minWidth="75.0" prefWidth="75.0" text="Run Date" />
+                              <TableColumn fx:id="dbStartTime" minWidth="75.0" prefWidth="75.0" text="Start Time" />
+                              <TableColumn fx:id="dbEndTime" minWidth="75.0" prefWidth="75.0" text="End Time" />
+                              <TableColumn fx:id="dbRadioContactRatio" editable="false" minWidth="75.0" prefWidth="75.0" text="RCR" />
+                              <TableColumn fx:id="dbCumulativeThroughput" editable="false" minWidth="75.0" prefWidth="75.0" text="C-TP" />
+                              <TableColumn fx:id="dbT1Throughput" editable="false" minWidth="75.0" prefWidth="75.0" text="T1-TP" />
+                              <TableColumn fx:id="dbT2Throughput" editable="false" minWidth="75.0" prefWidth="75.0" text="T2-TP" />
+                              <TableColumn fx:id="dbT3Throughput" editable="false" minWidth="75.0" prefWidth="75.0" text="T3-TP" />
+                              <TableColumn fx:id="dbBHThroughput" editable="false" minWidth="75.0" prefWidth="75.0" text="BH-TP" />
+                              <TableColumn fx:id="dbFHThroughput" editable="false" minWidth="75.0" prefWidth="75.0" text="FH-TP" />
+                              <TableColumn fx:id="dbMHThroughput" editable="false" minWidth="75.0" prefWidth="75.0" text="MH-TP" />
+                              <TableColumn fx:id="dbNFThroughput" editable="false" minWidth="75.0" prefWidth="75.0" text="NF-TP" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="packetTallyTab" text="Packet Tally">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <TableView fx:id="packetTallyTableNode" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="packetTallyTableNodeColumn" editable="false" prefWidth="75.0" text="Node" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="cthtallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="cthtallytablecolumn" prefWidth="75.0" text="CTH" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="esctallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="esctallytablecolumn" prefWidth="75.0" text="ESC" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="emctallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="emctallytablecolumn" prefWidth="75.0" text="EMC" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="emttallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="emttallytablecolumn" prefWidth="75.0" text="EMT" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="gtrtallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="gtrtallytablecolumn" prefWidth="75.0" text="GTR" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="prtallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="prtallytablecolumn" prefWidth="75.0" text="PR" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="nprtallytable" prefHeight="200.0" prefWidth="200.0">
+                                <columns>
+                                  <TableColumn fx:id="nprtallytablecolumn" prefWidth="75.0" text="NPR" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="simStatusTab" text="Sim Status">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="17.0" text="Capture Time Hide" />
+                        <Label fx:id="progressTextCTH" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="17.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="17.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <Label layoutX="14.0" layoutY="48.0" text="Epedemic Single Copy" />
+                        <Label fx:id="progressTextESC" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="48.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="48.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <Label layoutX="14.0" layoutY="78.0" text="Epedemic Multi Copy" />
+                        <Label fx:id="progressTextEMC" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="78.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="78.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <Label layoutX="14.0" layoutY="108.0" text="Expected Meeting Time" />
+                        <Label fx:id="progressTextEMT" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="108.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="108.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <Label layoutX="14.0" layoutY="138.0" text="Game Theory Routing" />
+                        <Label fx:id="progressTextGTR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="138.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="138.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <Label layoutX="14.0" layoutY="168.0" text="Prophet Routing" />
+                        <Label fx:id="progressTextPR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="168.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="168.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <Label layoutX="14.0" layoutY="198.0" text="New Prophet Routing" />
+                        <Label fx:id="progressTextNPR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="198.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                        <Label layoutX="241.0" layoutY="198.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="busyTab" text="Busy">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="busyScreenText" alignment="CENTER" layoutX="80.0" layoutY="120.0" text="${'Creating Charts\nPlease Wait...'}" textAlignment="CENTER" textFill="#4cae0f" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <effect>
+                              <Glow level="0.67" />
+                           </effect>
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                        </Label>
+                        <Pane fx:id="busyScreen" prefHeight="452.0" prefWidth="712.0" style="-fx-border-width: 0.0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <effect>
+                              <Bloom />
+                           </effect>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

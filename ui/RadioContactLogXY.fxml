@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bucksimulator.controller.RadioContactLogXYController">
+    <children>
+        <ScatterChart fx:id="radioContactLogChart" animated="false" layoutX="14.0" layoutY="14.0" legendVisible="false" mouseTransparent="true" onMouseDragged="#setZoomSize" onMouseMoved="#addTooltipsForChart" onMousePressed="#setZoomStartLocation" onMouseReleased="#zoomChart" prefHeight="403.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <xAxis>
+                <NumberAxis fx:id="rclXAxis" autoRanging="false" side="BOTTOM" tickUnit="1.0" upperBound="10.0" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="rclYAxis" layoutX="10.0" side="LEFT" upperBound="10" lowerBound="0" />
+            </yAxis>
+        </ScatterChart>
+    </children>
+</AnchorPane>
