@@ -23,6 +23,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.XYChart;
 import java.sql.Time;
+import java.util.HashMap;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 /**
  *
@@ -119,7 +127,7 @@ public abstract class BaseSimulation implements Simulation{
     ObservableList<GPSLog> nfGrazeGPSLog = FXCollections.observableArrayList();
     ObservableList<GPSLog> w1GrazeGPSLog = FXCollections.observableArrayList();
     XYChart.Series<Number, Number> w1Series, t1Series, t2Series, t3Series,
-            bhSeries, mhSeries,fhSeries, nfSeries;
+            bhSeries, mhSeries,fhSeries, nfSeries, d1Series;
     XYChart.Series rclXYSeries = new XYChart.Series<>(), rclXTSeries = new XYChart.Series<>()
             , rclYTSeries = new XYChart.Series<>();
     XYChart.Series tps = new XYChart.Series();
@@ -143,7 +151,6 @@ public abstract class BaseSimulation implements Simulation{
     ArrayList<GPSLog> fhGPSLog = new ArrayList<>();
     ArrayList<GPSLog> nfgGPSLog = new ArrayList<>();
     ArrayList<String> percentageLog = new ArrayList<>();
-    ArrayList<XYChart.Series> dtnl = new ArrayList<>(), gpslog = new ArrayList<>();
     XYChart.Data rcrSeries;
 
     BooleanProperty simStarted = new SimpleBooleanProperty();
@@ -154,17 +161,30 @@ public abstract class BaseSimulation implements Simulation{
     BooleanProperty simPaused = new SimpleBooleanProperty();
     BooleanProperty simSaved = new SimpleBooleanProperty();
     ObservableList<XYChart.Series<Number,Number>> gpslive = FXCollections.observableArrayList();
+    ObservableList<XYChart.Series<Number,Number>> dtnl = FXCollections.observableArrayList();
+    ObservableList<XYChart.Series<Number,Number>> gpslog = FXCollections.observableArrayList();
     boolean terminate = false;
     ArrayList<Boolean> glCheckBoxTrack = new ArrayList<>();
+    ArrayList<Boolean> dcCheckBoxTrack = new ArrayList<>();
     float ct, t1tp, t2tp, t3tp, bhtp, mhtp, fhtp, nftp;
     ObservableList<PacktTallyModel> packetModels = FXCollections.observableArrayList();
     Time startTime, endTime;
     SimDataModel sdm;
+    float rcratio;
+    final int imgWidth = 20 ; 
+    final int imgHeight = 20 ; 
+    final Image img = new Image("/bucksimulator/model/blackbuck_chart.jpg", imgWidth, imgHeight, true, true, true);
+    HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> dataTransferMapXY = new HashMap<>();
+    HashMap<Integer,HashMap<Integer,Integer>> dataTransferMapXT = new HashMap<>();
+    HashMap<Integer,HashMap<Integer,Integer>> dataTransferMapYT = new HashMap<>();
     
-
-    public BaseSimulation(ArrayList<XYChart.Series> dtnl) {
-        this.dtnl = dtnl;
+    public BaseSimulation() {
         for(int i = 0; i < 7; i++)
+        {
+            dtnl.add(new XYChart.Series());
+            dcCheckBoxTrack.add(Boolean.TRUE);
+        }
+        for(int i = 0; i < 8; i++)
         {
             gpslog.add(new XYChart.Series());
             glCheckBoxTrack.add(Boolean.TRUE);
@@ -181,6 +201,9 @@ public abstract class BaseSimulation implements Simulation{
         mhSeries = new XYChart.Series();
         fhSeries = new XYChart.Series();
         nfSeries = new XYChart.Series();
+        d1Series = new XYChart.Series();
+        d1Series.setName("DC");
+        d1Series.getData().add(new XYChart.Data(d1_x_coordinate-0.25,d1_y_coordinate-0.5));
         gpslive.add(w1Series);
         gpslive.add(t1Series);
         gpslive.add(t2Series);
@@ -189,6 +212,7 @@ public abstract class BaseSimulation implements Simulation{
         gpslive.add(mhSeries);
         gpslive.add(fhSeries);
         gpslive.add(nfSeries);
+        gpslive.add(d1Series);
         packetModels.add(new PacktTallyModel(0));
         packetModels.add(new PacktTallyModel(0));
         packetModels.add(new PacktTallyModel(0));
@@ -301,12 +325,13 @@ public abstract class BaseSimulation implements Simulation{
             simPaused.set(false);
             simSaved.set(false);
             simCompleted.set(false);
+            tpslc.getData().clear();
         });
     }
     void buckRouter()
     {
         w1logginglock=routing.open;
-        for(globaltick=1;globaltick<TICK_MAX;globaltick++)
+        for(globaltick=1;globaltick<1000;globaltick++)
 	{
             if (Thread.interrupted())
             {
@@ -780,14 +805,6 @@ public abstract class BaseSimulation implements Simulation{
     void results(int algorithmNum) {
         Time t = new Time(System.currentTimeMillis());
         endTime = t;
-        Platform.runLater(()-> {
-            simStarted.set(false);
-            simInProgress.set(false);
-            simCompleted.set(true);
-            simNotInProgress.set(true);
-            simPaused.set(false);
-            simNotStarted.set(true);
-        });
 
         float t1gpslog, t2gpslog, t3gpslog, bhgpslog, mhgpslog, fhgpslog, nfgpslog,
                 t1dtnlog, t2dtnlog, t3dtnlog, bhdtnlog, mhdtnlog, fhdtnlog, nfdtnlog;
@@ -966,7 +983,7 @@ public abstract class BaseSimulation implements Simulation{
         }
 
         //Add the Radio Contact Ratio value to the series
-        float rcratio;
+        
         if (dtnlogSum > 0)
         {
             rcratio = radioContactLog.size()/dtnlogSum;
@@ -981,11 +998,14 @@ public abstract class BaseSimulation implements Simulation{
         updateGPSLogSeries(algorithmNum);
         updateDataCenterSeries(algorithmNum);
 
-        //Update the binding properties
-        Platform.runLater(()->
-        {
+        //Update the binding properties        
+        Platform.runLater(()-> {
+            simStarted.set(false);
             simInProgress.set(false);
             simCompleted.set(true);
+            simNotInProgress.set(true);
+            simPaused.set(false);
+            simNotStarted.set(true);
         });
         packetModels.clear();
         packetModels.add(new PacktTallyModel(t1gpslog));
@@ -1182,6 +1202,11 @@ public abstract class BaseSimulation implements Simulation{
                 gpslog.get(6).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
+        for (GPSLog gpl : W1GPSLogList){
+            Platform.runLater(()-> {
+                gpslog.get(7).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+            });
+        }
         Platform.runLater(()-> {
         gpslog.get(0).setName("T1");
         gpslog.get(1).setName("T2");
@@ -1190,6 +1215,7 @@ public abstract class BaseSimulation implements Simulation{
         gpslog.get(4).setName("MH");
         gpslog.get(5).setName("FH");
         gpslog.get(6).setName("NF");
+        gpslog.get(7).setName("W1");
         });
     }
 
@@ -1197,47 +1223,47 @@ public abstract class BaseSimulation implements Simulation{
     {
         for (GPSLog gpl : t1DTNLog) {
             Platform.runLater(()-> {
-                dtnl.get(algorithmNum * 7).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(0).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         for (GPSLog gpl : t2DTNLog) {
             Platform.runLater(()-> {
-                dtnl.get((algorithmNum * 7)+1).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(1).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         for (GPSLog gpl : t3DTNLog) {
             Platform.runLater(()-> {
-                dtnl.get((algorithmNum * 7)+2).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(2).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         for (GPSLog gpl : bhDTNLog) {
             Platform.runLater(()-> {
-                dtnl.get((algorithmNum * 7)+3).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(3).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         for (GPSLog gpl : mhDTNLog) {
             Platform.runLater(()-> {
-                dtnl.get((algorithmNum * 7)+4).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(4).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         for (GPSLog gpl : fhDTNLog) {
             Platform.runLater(()-> {
-                dtnl.get((algorithmNum * 7)+5).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(5).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         for (GPSLog gpl : nfgDTNLog) {
             Platform.runLater(()-> {
-                dtnl.get((algorithmNum * 7)+6).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
+                dtnl.get(6).getData().add(new XYChart.Data<>(gpl.getxCord() - 0.5, gpl.getyCord() - 0.5));
             });
         }
         Platform.runLater(()-> {
-        dtnl.get((algorithmNum * 7)).setName("T1");
-        dtnl.get((algorithmNum * 7)+1).setName("T2");
-        dtnl.get((algorithmNum * 7)+2).setName("T3");
-        dtnl.get((algorithmNum * 7)+3).setName("BH");
-        dtnl.get((algorithmNum * 7)+4).setName("MH");
-        dtnl.get((algorithmNum * 7)+5).setName("FH");
-        dtnl.get((algorithmNum * 7)+6).setName("NF");
+        dtnl.get(0).setName("T1");
+        dtnl.get(1).setName("T2");
+        dtnl.get(2).setName("T3");
+        dtnl.get(3).setName("BH");
+        dtnl.get(4).setName("MH");
+        dtnl.get(5).setName("FH");
+        dtnl.get(6).setName("NF");
         });
     }
 
@@ -1245,6 +1271,113 @@ public abstract class BaseSimulation implements Simulation{
     public abstract void run();
 
     public abstract void push(int a, int b, float c);
+    
+    void toggleStyle(XYChart.Series<Number, Number> temp, int a, int b)
+    {
+        if (temp.getData().size() > 0)
+        {
+            Node n = temp.getData().get(0).getNode();
+            try
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    n.getStyleClass().add("bulge-symbol-sending");
+                    n.getStyleClass().add("bulge-symbol-sending");
+                    Thread.currentThread().sleep(150);
+                    n.getStyleClass().add("bulge-symbol-receiving");
+                    n.getStyleClass().add("bulge-symbol-receiving");
+                    Thread.currentThread().sleep(100);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+    }
+    
+    public void showDataTransfer(int a, int b)
+    {
+        if (dataTransferMapXY.containsKey(a))
+        {
+            if(dataTransferMapXY.get(a).containsKey(b))
+            {
+                dataTransferMapXY.get(a).get(b).add(globaltick);
+            }
+            else
+            {
+                ArrayList<Integer> tl = new ArrayList<>();
+                tl.add(globaltick);
+                dataTransferMapXY.get(a).put(b, tl);
+            }
+        }
+        else
+        {
+            ArrayList<Integer> tl = new ArrayList<>();
+            tl.add(globaltick);
+            HashMap<Integer, ArrayList<Integer>> thm = new HashMap<>();
+            thm.put(b, tl);
+            dataTransferMapXY.put(a,thm);
+        }
+        if (dataTransferMapXT.containsKey(a))
+        {
+            if(!dataTransferMapXT.get(a).containsKey(globaltick))
+            {
+                dataTransferMapXT.get(a).put(globaltick,b);
+            }
+        }
+        else
+        {
+            HashMap<Integer, Integer> thm = new HashMap<>();
+            thm.put(globaltick, b);
+            dataTransferMapXT.put(a,thm);
+        }
+        if (dataTransferMapXT.containsKey(b))
+        {
+            if(!dataTransferMapXT.get(b).containsKey(globaltick))
+            {
+                dataTransferMapXT.get(b).put(globaltick,a);
+            }
+        }
+        else
+        {
+            HashMap<Integer, Integer> thm = new HashMap<>();
+            thm.put(globaltick, a);
+            dataTransferMapXT.put(b,thm);
+        }
+        if( a < 7 && b < 9)
+        {
+        switch (a)
+        {
+            case 1 -> toggleStyle(t1Series,a ,b);
+            case 2 -> toggleStyle(t2Series,a ,b);
+            case 3 -> toggleStyle(t3Series,a ,b);
+            case 4 -> toggleStyle(bhSeries,a ,b);
+            case 5 -> toggleStyle(mhSeries,a ,b);
+            case 6 -> toggleStyle(fhSeries,a ,b);
+            case 7 -> toggleStyle(nfSeries,a ,b);
+            case 8 -> toggleStyle(w1Series,a ,b);
+            default ->
+            {
+            }
+        }
+        
+        switch (b)
+        {
+            case 1 -> toggleStyle(t1Series,a ,b);
+            case 2 -> toggleStyle(t2Series,a ,b);
+            case 3 -> toggleStyle(t3Series,a ,b);
+            case 4 -> toggleStyle(bhSeries,a ,b);
+            case 5 -> toggleStyle(mhSeries,a ,b);
+            case 6 -> toggleStyle(fhSeries,a ,b);
+            case 7 -> toggleStyle(nfSeries,a ,b);
+            case 8 -> toggleStyle(w1Series,a ,b);
+            default ->
+            {
+            }
+        }
+        }
+    }
     /**
      *This function simulates the data center.It does data pull from b1
      * when it comes in radio contact with them.It has linear memory of 560 words.
@@ -1306,8 +1439,8 @@ public abstract class BaseSimulation implements Simulation{
             W1GPSLogList.add(new GPSLog(w1_x_coordinate, w1_y_coordinate));
             w1logginglock=routing.shut;
             Platform.runLater(() -> {
+                w1Series.getData().clear();
             w1Series.getData().add(new XYChart.Data(w1_x_coordinate-0.5,w1_y_coordinate-0.5));
-            w1Series.getData().remove(0);
             });
         }
         int duplicate = 0;
@@ -1324,8 +1457,16 @@ public abstract class BaseSimulation implements Simulation{
             W1GPSLogList.add(new GPSLog(w1_x_coordinate, w1_y_coordinate));
             w1GrazeGPSLog.add(new GPSLog(w1_x_coordinate, w1_y_coordinate));
             Platform.runLater(() -> {
-            w1Series.getData().add(new XYChart.Data(w1_x_coordinate-0.5,w1_y_coordinate-0.5));
-            w1Series.getData().remove(0);
+            XYChart.Data<Number, Number> d = new XYChart.Data(w1_x_coordinate-0.5,w1_y_coordinate-0.5);
+            //d.setNode(new ImageView(img));
+            w1Series.getData().clear();
+            w1Series.getData().add(d);
+            /*Node n = w1Series.getData().get(0).getNode();
+            Tooltip tt = new Tooltip("test");
+            tt.setShowDelay(Duration.millis(0));
+            Tooltip.install(n, tt);
+            Bounds boundsInScene = n.localToScene(n.layoutBoundsProperty().get());
+            tt.show(n, boundsInScene.getCenterX(), boundsInScene.getCenterY());*/
             });
         }
         if((prev_w1_x_coordinate != w1_x_coordinate)||(prev_w1_y_coordinate != w1_y_coordinate))
@@ -1523,15 +1664,27 @@ public abstract class BaseSimulation implements Simulation{
     }
     
     @Override
-    public ArrayList<XYChart.Series> getGPSLog()
+    public ObservableList<XYChart.Series<Number,Number>> getGPSLog()
     {
         return gpslog;
+    }
+    
+    @Override
+    public ObservableList<XYChart.Series<Number,Number>> getDTNLog()
+    {
+        return dtnl;
     }
     
     @Override
     public ArrayList<Boolean> getGLCheckBoxTrack()
     {
         return glCheckBoxTrack;
+    }
+    
+    @Override
+    public ArrayList<Boolean> getDCCheckBoxTrack()
+    {
+        return dcCheckBoxTrack;
     }
     
     @Override
@@ -1542,7 +1695,7 @@ public abstract class BaseSimulation implements Simulation{
             sdm = new SimDataModel();
             sdm.setSimName(simName());
             sdm.setSimRunDate(LocalDate.now());
-            sdm.setRcr(Float.parseFloat(rcrSeries.getYValue().toString()));
+            sdm.setRcr(rcratio);
             sdm.setCt(ct);
             sdm.setT1tp(t1tp);
             sdm.setT2tp(t2tp);
@@ -1577,5 +1730,23 @@ public abstract class BaseSimulation implements Simulation{
     public BooleanProperty getSimSavedProperty()
     {
         return simSaved;
+    }
+    
+    @Override
+    public HashMap<Integer,HashMap<Integer,ArrayList<Integer>>> getDataTranferMapXY()
+    {
+        return dataTransferMapXY;
+    }
+    
+    @Override
+    public HashMap<Integer,HashMap<Integer,Integer>> getDataTranferMapXT()
+    {
+        return dataTransferMapXT;
+    }
+    
+    @Override
+    public HashMap<Integer,HashMap<Integer,Integer>> getDataTranferMapYT()
+    {
+        return dataTransferMapYT;
     }
 }

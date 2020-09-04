@@ -88,9 +88,8 @@ public class NewProphetRouting extends BaseSimulation
         0, 0, 0, 0, 0, 0, 0
     };
 
-    public NewProphetRouting(ArrayList<XYChart.Series> dtnl)
+    public NewProphetRouting()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("NPR", 0);
         tps.setName("NPR");
         tpslc.setName("NPR");
@@ -2925,6 +2924,7 @@ public class NewProphetRouting extends BaseSimulation
                     clearFirstRCL = false;
                 }
             });
+            showDataTransfer(sagentid, ragentid);
         }
         else
         {
@@ -2939,7 +2939,7 @@ public class NewProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2956,7 +2956,7 @@ public class NewProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -3004,7 +3004,7 @@ public class NewProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -3022,7 +3022,7 @@ public class NewProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -3044,9 +3044,11 @@ public class NewProphetRouting extends BaseSimulation
                     clearFirstRCL = false;
                 }
             });
-
+            if(sagentid == 8 && ragentid == 9)
+            {
+                showDataTransfer(8, 9);
+            }
         }
-
     }
 
     @Override

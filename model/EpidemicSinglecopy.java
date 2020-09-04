@@ -5,7 +5,6 @@
  */
 package bucksimulator.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,9 +72,8 @@ public class EpidemicSinglecopy extends BaseSimulation{
     float[] sendingagentemt={700,700,700,700,700,700,700,700,700};
 
     long c4random_seed = 10;
-    public EpidemicSinglecopy(ArrayList<XYChart.Series> dtnl)
+    public EpidemicSinglecopy()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("ESC",0);
         tps.setName("ESC");
         tpslc.setName("ESC");
@@ -2044,8 +2042,6 @@ void epidemicsinglecopyrouting(int sendingagentid)
             {
                 sendingagentemt[sagentid] = rhideeffort;
                 key = 1;
-                ////System.out.printf("key %d	\n", key);
-                //Sleep(1000);
             }
             if (key == 1) {
                 switch (sagentid) {
@@ -2100,9 +2096,6 @@ void epidemicsinglecopyrouting(int sendingagentid)
                     case 8:
                         recvmsg = Arrays.copyOf(w1_message, recvmsg.length);
                         break;
-                    //case 9:
-                    //memcpy(recvmsg,d1_message,sizeof(recvmsg));
-                    //break;
                 }
 
                 int flag;
@@ -2192,9 +2185,6 @@ void epidemicsinglecopyrouting(int sendingagentid)
                     case 8:
                         w1_message = Arrays.copyOf(recvmsg, w1_message.length);
                         break;
-                    //case 9:
-                    //memcpy(d1_message,recvmsg,sizeof(w1_message));
-                    //break;
                 }
 
                 radioContactLog.add(new RadioContactLog(sagentid, ragentid, globaltick));
@@ -2210,7 +2200,7 @@ void epidemicsinglecopyrouting(int sendingagentid)
                     clearFirstRCL = false;
                 }
                 });
-
+                showDataTransfer(sagentid, ragentid);
             }
 
         } else {
@@ -2233,7 +2223,7 @@ void epidemicsinglecopyrouting(int sendingagentid)
                     default:
                         ////System.out.printf("Some things is wrong with Push! \n");
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2247,7 +2237,7 @@ void epidemicsinglecopyrouting(int sendingagentid)
                     default:
                         ////System.out.printf("Some things is wrong with Push! \n");
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2294,7 +2284,7 @@ void epidemicsinglecopyrouting(int sendingagentid)
                     default:
                         ////System.out.printf("Some things is wrong with Push! \n");
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2310,7 +2300,7 @@ void epidemicsinglecopyrouting(int sendingagentid)
                         ////System.out.printf("Some things is wrong with Push! \n");
 
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2332,6 +2322,11 @@ void epidemicsinglecopyrouting(int sendingagentid)
                         clearFirstRCL = false;
                     }
                 });
+                
+                if(sagentid == 8 && ragentid == 9)
+                {
+                    showDataTransfer(8, 9);
+                }
             }
 
         }

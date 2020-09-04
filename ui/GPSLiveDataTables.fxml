@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" fx:id="GPSLiveDataAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" fx:controller="bucksimulator.controller.GPSLiveDataTablesController">
+<children>
+   <Label fx:id="tableTitle" alignment="CENTER" text="Label" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="20.0" prefHeight="428.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+      <content>
+         <HBox alignment="CENTER" snapToPixel="false">
+            <children>
+               <TableView fx:id="w1DataTable" minWidth="-Infinity" prefWidth="150.0" snapToPixel="false" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="150.0" sortable="false" text="W1">
+                        <columns>
+                           <TableColumn fx:id="w1xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="w1yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="nfDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="150.0" sortable="false" text="NF">
+                        <columns>
+                           <TableColumn fx:id="nfxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="nfyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="fhDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="150.0" sortable="false" text="FH">
+                        <columns>
+                           <TableColumn fx:id="fhxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="fhyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="mhDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="MH">
+                        <columns>
+                           <TableColumn fx:id="mhxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="mhyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="bhDataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="BH">
+                        <columns>
+                           <TableColumn fx:id="bhxColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="bhyColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="t3DataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="T3">
+                        <columns>
+                           <TableColumn fx:id="t3xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="t3yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="t2DataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="T2">
+                        <columns>
+                           <TableColumn fx:id="t2xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="t2yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+               <TableView fx:id="t1DataTable" minWidth="-Infinity" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                  <columns>
+                     <TableColumn editable="false" minWidth="0.0" prefWidth="225.0" sortable="false" text="T1">
+                        <columns>
+                           <TableColumn fx:id="t1xColumn" editable="false" prefWidth="75.0" sortable="false" text="X" />
+                           <TableColumn fx:id="t1yColumn" editable="false" prefWidth="75.0" sortable="false" text="Y" />
+                        </columns>
+                     </TableColumn>
+                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
+               </TableView>
+            </children>
+         </HBox>
+      </content>
+   </ScrollPane>
+</children>
+</AnchorPane>

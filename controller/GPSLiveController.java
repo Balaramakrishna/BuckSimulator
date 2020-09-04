@@ -28,6 +28,7 @@ public class GPSLiveController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO 
+        gpsLiveChart.getStylesheets().add("/bucksimulator/css/GpsLiveChartBackground.css");
     }    
 
     public void setData(Simulation sim)

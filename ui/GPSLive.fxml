@@ -11,10 +11,10 @@
    <children>
       <ScatterChart fx:id="gpsLiveChart" animated="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <xAxis>
-          <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" />
+          <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="26.0" />
         </xAxis>
         <yAxis>
-          <NumberAxis autoRanging="false" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+          <NumberAxis autoRanging="false" minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="33.0" />
         </yAxis>
       </ScatterChart>
    </children>

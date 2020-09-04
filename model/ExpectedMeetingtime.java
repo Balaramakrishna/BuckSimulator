@@ -73,9 +73,8 @@ public class ExpectedMeetingtime extends BaseSimulation{
     /* Set for a given simulation */
     float[] sendingagentemt={700,700,700,700,700,700,700,700,700};
 
-    public ExpectedMeetingtime(ArrayList<XYChart.Series> dtnl)
+    public ExpectedMeetingtime()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("EMT",0);
         tps.setName("EMT");
         tpslc.setName("EMT");
@@ -2476,7 +2475,7 @@ void searchtheoryrouting(int sendingagentid)
                     clearFirstRCL = false;
                 }
                 });
-
+                showDataTransfer(sagentid, ragentid);
             }
 
         } else {
@@ -2488,39 +2487,16 @@ void searchtheoryrouting(int sendingagentid)
             if (sendingagentemt[sagentid] >= rhideeffort) {
                 sendingagentemt[sagentid] = rhideeffort;
                 key = 1;
-                //System.out.printf("key %d	\n", key);
-//				Sleep(1000);
             }
             if (key == 1) {
                 switch (sagentid) {
-                    /*case 1:
-                    memcpy(sendmsg,t1_message,sizeof(sendmsg));
-                    break;
-                    case 2:            //
-                    memcpy(sendmsg,t2_message,sizeof(sendmsg));
-                    break;
-                    case 3:            //
-                    memcpy(sendmsg,t3_message,sizeof(sendmsg));
-                    break;
-                    case 4:            //
-                    memcpy(sendmsg,bh_message,sizeof(sendmsg));
-                    break;
-                    case 5:            //
-                    memcpy(sendmsg,mh_message,sizeof(sendmsg));
-                    break;
-                    case 6:            //
-                    memcpy(sendmsg,fh_message,sizeof(sendmsg));
-                    break;
-                    case 7:            //
-                    memcpy(sendmsg,nf_message,sizeof(sendmsg));
-                    break;					*/
                     case 8:
                         sendmsg = Arrays.copyOf(w1_message, sendmsg.length);
                         break;
                     default:
                         //System.out.printf("Some things is wrong with Push! \n");
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2528,37 +2504,13 @@ void searchtheoryrouting(int sendingagentid)
                 }
 
                 switch (ragentid) {
-                    /*case 1:            //
-                        memcpy(recvmsg,t1_message,sizeof(recvmsg));
-                        break;
-                    case 2:            //
-                        memcpy(recvmsg,t2_message,sizeof(recvmsg));
-                        break;
-                    case 3:            //
-                        memcpy(recvmsg,t3_message,sizeof(recvmsg));
-                        break;
-                    case 4:            //
-                        memcpy(recvmsg,bh_message,sizeof(recvmsg));
-                        break;
-                    case 5:            //
-                        memcpy(recvmsg,mh_message,sizeof(recvmsg));
-                        break;
-                    case 6:            //
-                        memcpy(recvmsg,fh_message,sizeof(recvmsg));
-                        break;
-                    case 7:            //
-                        memcpy(recvmsg,nf_message,sizeof(recvmsg));
-                        break;
-                    case 8:            //
-                        memcpy(recvmsg,w1_message,sizeof(recvmsg));
-                        break;*/
                     case 9:
                         recvmsg = Arrays.copyOf(d1_message, recvmsg.length);
                         break;
                     default:
                         //System.out.printf("Some things is wrong with Push! \n");
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2599,34 +2551,13 @@ void searchtheoryrouting(int sendingagentid)
                 //System.out.printf("\n");
 
                 switch (sagentid) {
-                    /*case 1:            //
-                        memcpy(t1_message,sendmsg,sizeof(t1_message));
-                        break;
-                    case 2:            //
-                        memcpy(t2_message,sendmsg,sizeof(t2_message));
-                        break;
-                    case 3:            //
-                        memcpy(t3_message,sendmsg,sizeof(t3_message));
-                        break;
-                    case 4:            //
-                        memcpy(bh_message,sendmsg,sizeof(bh_message));
-                        break;
-                    case 5:            //
-                        memcpy(mh_message,sendmsg,sizeof(mh_message));
-                        break;
-                    case 6:            //
-                        memcpy(bh_message,sendmsg,sizeof(fh_message));
-                        break;
-                    case 7:            //
-                        memcpy(nf_message,sendmsg,sizeof(nf_message));
-                        break;			*/
                     case 8:
                         w1_message = Arrays.copyOf(sendmsg, w1_message.length);
                         break;
                     default:
                         //System.out.printf("Some things is wrong with Push! \n");
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2635,30 +2566,6 @@ void searchtheoryrouting(int sendingagentid)
 
                 switch (ragentid)
                 {
-                    /*case 1:            //
-                            memcpy(t1_message,recvmsg,sizeof(t1_message));
-                            break;
-                      case 2:            //
-                            memcpy(t2_message,recvmsg,sizeof(t2_message));
-                            break;
-                      case 3:            //
-                            memcpy(t3_message,recvmsg,sizeof(t3_message));
-                            break;
-                      case 4:            //
-                            memcpy(bh_message,recvmsg,sizeof(bh_message));
-                            break;
-                      case 5:            //
-                            memcpy(mh_message,recvmsg,sizeof(mh_message));
-                            break;
-                      case 6:            //
-                            memcpy(fh_message,recvmsg,sizeof(fh_message));
-                            break;
-                      case 7:            //
-                            memcpy(nf_message,recvmsg,sizeof(nf_message));
-                            break;
-                      case 8:            //
-                            memcpy(w1_message,recvmsg,sizeof(w1_message));
-                            break;				*/
                     case 9:
                         d1_message = Arrays.copyOf(recvmsg, d1_message.length);
                         break;
@@ -2666,7 +2573,7 @@ void searchtheoryrouting(int sendingagentid)
                         //System.out.printf("Some things is wrong with Push! \n");
 
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -2688,6 +2595,11 @@ void searchtheoryrouting(int sendingagentid)
                         clearFirstRCL = false;
                     }
                 });
+                
+                if(sagentid == 8 && ragentid == 9)
+                {
+                    showDataTransfer(8, 9);
+                }
             }
 
         }

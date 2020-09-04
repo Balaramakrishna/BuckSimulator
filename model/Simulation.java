@@ -6,6 +6,7 @@
 package bucksimulator.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
@@ -45,8 +46,13 @@ public interface Simulation extends Runnable{
     void resumeSim();
     void signalTerminate();
     String simName();
-    ArrayList<XYChart.Series> getGPSLog();
+    ObservableList<XYChart.Series<Number,Number>> getGPSLog();
+    ObservableList<XYChart.Series<Number,Number>> getDTNLog();
     ArrayList<Boolean> getGLCheckBoxTrack();
+    ArrayList<Boolean> getDCCheckBoxTrack();
     int saveSimData();
     ObservableList<PacktTallyModel> getPacktTallyData();
+    HashMap<Integer,HashMap<Integer,ArrayList<Integer>>>  getDataTranferMapXY();
+    HashMap<Integer,HashMap<Integer,Integer>>  getDataTranferMapXT();
+    HashMap<Integer,HashMap<Integer,Integer>>  getDataTranferMapYT();
 }

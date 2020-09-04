@@ -72,9 +72,8 @@ public class EpidemicMulticopy extends BaseSimulation{
     /* Set for a given simulation */
     float[] sendingagentemt={700,700,700,700,700,700,700,700,700};
 
-    public EpidemicMulticopy(ArrayList<XYChart.Series> dtnl)
+    public EpidemicMulticopy()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("EMC",0);
         tps.setName("EMC");
         tpslc.setName("EMC");
@@ -1531,7 +1530,7 @@ public class EpidemicMulticopy extends BaseSimulation{
             int[] sendmsg = new int[2000];
             int[] recvmsg = new int[2000];
             int key = 0;
-
+            
             if (sendingagentemt[sagentid] >= rhideeffort)
             {
                 sendingagentemt[sagentid] = rhideeffort;
@@ -1642,7 +1641,7 @@ public class EpidemicMulticopy extends BaseSimulation{
                         clearFirstRCL = false;
                     }
                 });
-
+                showDataTransfer(sagentid, ragentid);
             }
 
         } else
@@ -1667,7 +1666,7 @@ public class EpidemicMulticopy extends BaseSimulation{
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex)
                         {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1683,7 +1682,7 @@ public class EpidemicMulticopy extends BaseSimulation{
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex)
                         {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1737,7 +1736,7 @@ public class EpidemicMulticopy extends BaseSimulation{
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                     } catch (InterruptedException ex)
                     {
                         Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1755,7 +1754,7 @@ public class EpidemicMulticopy extends BaseSimulation{
 
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                     } catch (InterruptedException ex)
                     {
                         Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1778,6 +1777,10 @@ public class EpidemicMulticopy extends BaseSimulation{
                         clearFirstRCL = false;
                     }
                 });
+                if(sagentid == 8 && ragentid == 9)
+                {
+                    showDataTransfer(8, 9);
+                }
             }
 
         }

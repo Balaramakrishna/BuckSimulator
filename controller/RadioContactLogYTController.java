@@ -34,6 +34,7 @@ public class RadioContactLogYTController implements Initializable
 {
     boolean zoomStarted;
     Rectangle zoomArea = new Rectangle();
+    Simulation currentSim;
     final ObjectProperty<Point2D> mouseAnchor = new SimpleObjectProperty<>();
     @FXML
     private ScatterChart<Number, Number> radioContactLogChart;
@@ -58,6 +59,7 @@ public class RadioContactLogYTController implements Initializable
     
     void setData(Simulation sim)
     {
+        currentSim = sim;
         radioContactLogChart.getData().add(sim.getRCLYGTSeries());
     }
     
@@ -95,11 +97,20 @@ public class RadioContactLogYTController implements Initializable
     @FXML
     private void addTooltipsForChart(MouseEvent event)
     {
-        for (XYChart.Series<Number, Number> s : radioContactLogChart.getData()) {
-            for (XYChart.Data<Number, Number> d : s.getData()) {
-                Tooltip tt = new Tooltip(d.getXValue().toString()+" , "+d.getYValue().toString());
-                tt.setShowDelay(Duration.millis(20));
-                Tooltip.install(d.getNode(), tt);
+        if (currentSim.getSimStartedProperty().get() || currentSim.getSimCompletedProperty().get())
+        {
+            for (XYChart.Series<Number, Number> s : radioContactLogChart.getData())
+            {
+                for (XYChart.Data<Number, Number> d : s.getData())
+                {
+                    if (d.getXValue().intValue() != 9)
+                    {
+                        int n = currentSim.getDataTranferMapXT().get(d.getXValue()).get(d.getYValue());
+                        Tooltip tt = new Tooltip("Node "+d.getXValue().toString() + " received from node " + n + " at " + d.getYValue().toString());
+                        tt.setShowDelay(Duration.millis(20));
+                        Tooltip.install(d.getNode(), tt);
+                    }
+                }
             }
         }
     }
@@ -122,5 +133,10 @@ public class RadioContactLogYTController implements Initializable
             zoomArea.setHeight(0);
             zoomStarted = false;
         }
+    }
+    
+    public ScatterChart<?, ?> getChart()
+    {
+        return radioContactLogChart;
     }
 }

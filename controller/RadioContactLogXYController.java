@@ -11,7 +11,10 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -20,7 +23,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class RadioContactLogXYController implements Initializable
 {
-
+    Simulation currentSim;
     @FXML
     private ScatterChart<Number, Number> radioContactLogChart;
 
@@ -35,6 +38,7 @@ public class RadioContactLogXYController implements Initializable
     
     void setData(Simulation sim)
     {
+        currentSim = sim;
         radioContactLogChart.getData().add(sim.getRClXYSeries());
     }
 
@@ -51,11 +55,32 @@ public class RadioContactLogXYController implements Initializable
     @FXML
     private void addTooltipsForChart(MouseEvent event)
     {
+        if (currentSim.getSimStartedProperty().get() || currentSim.getSimCompletedProperty().get())
+        {
+            for (XYChart.Series<Number, Number> s : radioContactLogChart.getData())
+            {
+                for (XYChart.Data<Number, Number> d : s.getData())
+                {
+                    if (d.getYValue().intValue() != 9)
+                    {
+                        int n = currentSim.getDataTranferMapXY().get(d.getXValue()).get(d.getYValue()).size();
+                        Tooltip tt = new Tooltip("Node "+d.getXValue().toString() + " sent to node " + d.getYValue().toString() + ", " + n + " times");
+                        tt.setShowDelay(Duration.millis(20));
+                        Tooltip.install(d.getNode(), tt);
+                    }
+                }
+            }
+        }
     }
 
     @FXML
     private void setZoomStartLocation(MouseEvent event)
     {
+    }
+    
+    public ScatterChart<?, ?> getChart()
+    {
+        return radioContactLogChart;
     }
     
 }

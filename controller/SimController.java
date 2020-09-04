@@ -55,17 +55,20 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.WritableImage;
@@ -102,10 +105,10 @@ public class SimController implements Initializable {
     boolean zoomStarted = false;
     double zoomEndY, zoomStartY;
     Simulation taskcth, taskemc, taskesc, taskemt, taskgtr, tasknpr, taskpr, currentSim;
-    int prevDTNAlgorithmNum = -1;
+    int showing;
+    
     double prevHeight, prevWidth;
     Thread t1, t2, t3, t4, t5, t6, t7, currentThread;
-    HashMap<String, ArrayList<Boolean>> dcCheckBoxTrack = new HashMap<>();//track if this is the first time to see this chart
     
     ArrayList<XYChart.Series> dtnl = new ArrayList<>();
     ArrayList<CheckBox> gpsLogCBList = new ArrayList<>();
@@ -113,8 +116,6 @@ public class SimController implements Initializable {
     ArrayList<BooleanProperty> glCBDisPropList = new ArrayList<>();
     ArrayList<BooleanProperty> dcCBDisPropList = new ArrayList<>();
     XYChart.Series radioContactRatioSeries = new XYChart.Series();
-    String[] algorithms = {"Capture Time Hide", "Epedemic Single Copy", "Epedemic Multi Copy",
-    "Expected Meeting Time", "Game Theory Routing", "Prophet Routing", "New Prophet Routing"};
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -124,7 +125,7 @@ public class SimController implements Initializable {
     @FXML
     private BarChart<String, Number> throughputChart;
     @FXML
-    private RadioMenuItem darkTheme;
+    private RadioButton darkTheme;
     @FXML
     private Label progressTextCTH;
     @FXML
@@ -158,7 +159,7 @@ public class SimController implements Initializable {
     @FXML
     private ScatterChart<Number, Number> gpsLiveChart;
     @FXML
-    private ScatterChart<?, ?> gpsLogChart;
+    private ScatterChart<Number, Number> gpsLogChart;
     @FXML
     private CheckBox t1CBGL;
     @FXML
@@ -528,9 +529,15 @@ public class SimController implements Initializable {
     @FXML
     private TableColumn<?, ?> dbEndTime;
     @FXML
-    private RadioMenuItem autoSaveDBMI;
-    @FXML
     private Menu saveIndividualSimDataToDBM;
+    @FXML
+    private CheckBox w1CBGL;
+    @FXML
+    private Tab preferencesTab;
+    @FXML
+    private TextField chartBackgroundTF;
+    @FXML
+    private RadioButton autoSaveDBRB;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -543,6 +550,9 @@ public class SimController implements Initializable {
                 busyScreenText.getStyleClass().add("label1");
                 startScreen.getStyleClass().add("pane-background");
                 busyScreen.getStyleClass().add("pane-background");
+                gpsLiveChart.getStylesheets().add("/bucksimulator/css/GpsLiveChartBackground.css");
+                gpsLogChart.getStylesheets().add("/bucksimulator/css/GpsLiveChartBackground.css");
+                dataCenterChart.getStylesheets().add("/bucksimulator/css/GpsLiveChartBackground.css");
                 prefs = Preferences.userRoot().node(SimController.class.getName());
                 String m = DBConnect.DBConnect();
                 System.out.println(m);
@@ -554,6 +564,7 @@ public class SimController implements Initializable {
                 gpsLogCBList.add(mhCBGL);
                 gpsLogCBList.add(fhCBGL);
                 gpsLogCBList.add(nfCBGL);
+                gpsLogCBList.add(w1CBGL);
                 dcCBList.add(t1CBDC);
                 dcCBList.add(t2CBDC);
                 dcCBList.add(t3CBDC);
@@ -563,33 +574,22 @@ public class SimController implements Initializable {
                 dcCBList.add(nfCBDC);
                 for (int i = 0; i < 7; i++)
                 {
-                    SimpleBooleanProperty sbp = new SimpleBooleanProperty();
-                    glCBDisPropList.add(sbp);
-                    gpsLogCBList.get(i).disableProperty().bind(sbp);
                     SimpleBooleanProperty sbp1 = new SimpleBooleanProperty();
                     dcCBDisPropList.add(sbp1);
                     dcCBList.get(i).disableProperty().bind(sbp1);
+                }
+                for (int i = 0; i < 8; i++)
+                {
+                    SimpleBooleanProperty sbp = new SimpleBooleanProperty();
+                    glCBDisPropList.add(sbp);
+                    gpsLogCBList.get(i).disableProperty().bind(sbp);
                 }
                 // Show start screen
                 masterTabPane.getSelectionModel().select(startScreenTab);
                 Platform.runLater(() ->
                 {
                     radioContactRatioChart.getData().add(radioContactRatioSeries);
-                });
-                for (int i = 0; i < 49; i++)
-                {
-                    dtnl.add(new XYChart.Series());
-                }
-
-                for (int i = 0; i < 7; i++)
-                {
-                    ArrayList<Boolean> t = new ArrayList<>();
-                    for (int j = 0; j < 7; j++)
-                    {
-                        t.add(Boolean.TRUE);
-                    }
-                    dcCheckBoxTrack.put(algorithms[i], t);
-                }
+                
 
                 //Chart Zoom
                 zoomArea.setManaged(false);
@@ -597,13 +597,12 @@ public class SimController implements Initializable {
                 rclAnchorPane.getChildren().add(zoomArea);
 
                 //Sims
-                taskcth = new CaptureTimeHide(dtnl);
+                taskcth = new CaptureTimeHide();
                 progressTextCTH.textProperty().bind(taskcth.getSimprogressProperty().asString());
                 //cthViewMI.visibleProperty().bind(taskcth.getSimStartedProperty());
                 gpsLogCTHMI.visibleProperty().bind(taskcth.getSimCompletedProperty());
                 cthExportMI.visibleProperty().bind(taskcth.getSimCompletedProperty());
                 cthDBMI.visibleProperty().bind(taskcth.getSimCompletedProperty());
-                cthDBMI.disableProperty().bind(taskcth.getSimSavedProperty());
                 tpCTHMI.visibleProperty().bind(taskcth.getSimCompletedProperty());
                 dcCTHMI.visibleProperty().bind(taskcth.getSimCompletedProperty());
                 radioContactRatioSeries.getData().add(taskcth.getRadioContactRatio());
@@ -614,7 +613,7 @@ public class SimController implements Initializable {
                 pauseCTHMI.visibleProperty().bind(taskcth.getSimInProgressProperty());
                 resumeCTHMI.visibleProperty().bind(taskcth.getSimPausedProperty());
 
-                taskemc = new EpidemicMulticopy(dtnl);
+                taskemc = new EpidemicMulticopy();
                 progressTextEMC.textProperty().bind(taskemc.getSimprogressProperty().asString());
                 //emcViewMI.visibleProperty().bind(taskemc.getSimStartedProperty());
                 gpsLogEMCMI.visibleProperty().bind(taskemc.getSimCompletedProperty());
@@ -630,7 +629,7 @@ public class SimController implements Initializable {
                 pauseEMCMI.visibleProperty().bind(taskemc.getSimInProgressProperty());
                 resumeEMCMI.visibleProperty().bind(taskemc.getSimPausedProperty());
 
-                taskesc = new EpidemicSinglecopy(dtnl);
+                taskesc = new EpidemicSinglecopy();
                 progressTextESC.textProperty().bind(taskesc.getSimprogressProperty().asString());
                 //escViewMI.visibleProperty().bind(taskesc.getSimStartedProperty());
                 gpsLogESCMI.visibleProperty().bind(taskesc.getSimCompletedProperty());
@@ -646,7 +645,7 @@ public class SimController implements Initializable {
                 pauseESCMI.visibleProperty().bind(taskesc.getSimInProgressProperty());
                 resumeESCMI.visibleProperty().bind(taskesc.getSimPausedProperty());
 
-                taskemt = new ExpectedMeetingtime(dtnl);
+                taskemt = new ExpectedMeetingtime();
                 progressTextEMT.textProperty().bind(taskemt.getSimprogressProperty().asString());
                 //emtViewMI.visibleProperty().bind(taskemt.getSimStartedProperty());
                 gpsLogEMTMI.visibleProperty().bind(taskemt.getSimCompletedProperty());
@@ -662,7 +661,7 @@ public class SimController implements Initializable {
                 pauseEMTMI.visibleProperty().bind(taskemt.getSimInProgressProperty());
                 resumeEMTMI.visibleProperty().bind(taskemt.getSimPausedProperty());
 
-                taskgtr = new GameTheoryRouting(dtnl);
+                taskgtr = new GameTheoryRouting();
                 progressTextGTR.textProperty().bind(taskgtr.getSimprogressProperty().asString());
                 //gtrViewMI.visibleProperty().bind(taskgtr.getSimStartedProperty());
                 gpsLogGTRMI.visibleProperty().bind(taskgtr.getSimCompletedProperty());
@@ -678,7 +677,7 @@ public class SimController implements Initializable {
                 pauseGTRMI.visibleProperty().bind(taskgtr.getSimInProgressProperty());
                 resumeGTRMI.visibleProperty().bind(taskgtr.getSimPausedProperty());
 
-                tasknpr = new NewProphetRouting(dtnl);
+                tasknpr = new NewProphetRouting();
                 progressTextNPR.textProperty().bind(tasknpr.getSimprogressProperty().asString());
                 //nprViewMI.visibleProperty().bind(tasknpr.getSimStartedProperty());
                 gpsLogNPRMI.visibleProperty().bind(tasknpr.getSimCompletedProperty());
@@ -694,7 +693,7 @@ public class SimController implements Initializable {
                 pauseNPRMI.visibleProperty().bind(tasknpr.getSimInProgressProperty());
                 resumeNPRMI.visibleProperty().bind(tasknpr.getSimPausedProperty());
 
-                taskpr = new ProphetRouting(dtnl);
+                taskpr = new ProphetRouting();
                 progressTextPR.textProperty().bind(taskpr.getSimprogressProperty().asString());
                 //nprViewMI.visibleProperty().bind(taskpr.getSimStartedProperty());
                 gpsLogPRMI.visibleProperty().bind(taskpr.getSimCompletedProperty());
@@ -789,10 +788,10 @@ public class SimController implements Initializable {
                 prtallytable.setItems(taskpr.getPacktTallyData());
                 nprtallytable.setItems(tasknpr.getPacktTallyData());
                 
-                saveIndividualSimDataToDBM.disableProperty().bind(autoSaveDBMI.selectedProperty());
+                saveIndividualSimDataToDBM.disableProperty().bind(autoSaveDBRB.selectedProperty());
                 
-                autoSaveDBMI.setSelected(prefs.getBoolean(autoSave, true));
-                if(autoSaveDBMI.isSelected())
+                autoSaveDBRB.setSelected(prefs.getBoolean(autoSave, true));
+                if(autoSaveDBRB.isSelected())
                 {
                     taskcth.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(taskcth));
                     taskesc.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(taskesc));
@@ -802,6 +801,7 @@ public class SimController implements Initializable {
                     taskpr.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(taskpr));
                     tasknpr.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(tasknpr));
                 }
+                });
                return "";
             }
         };
@@ -824,11 +824,62 @@ public class SimController implements Initializable {
     }
     void addTootips(ScatterChart<Number,Number> chart)
     {
-        for (XYChart.Series<Number, Number> s : chart.getData()) {
+        /*for (XYChart.Series<Number, Number> s : chart.getData()) {
             for (XYChart.Data<Number, Number> d : s.getData()) {
                 Tooltip tt = new Tooltip(d.getXValue().toString()+" , "+d.getYValue().toString());
                 tt.setShowDelay(Duration.millis(20));
                 Tooltip.install(d.getNode(), tt);
+            }
+        }*/
+        if (currentSim.getSimStartedProperty().get() || currentSim.getSimCompletedProperty().get())
+        {
+            if (showing == 0)
+            {
+                for (XYChart.Series<Number, Number> s : chart.getData())
+                {
+                    for (XYChart.Data<Number, Number> d : s.getData())
+                    {
+                        if (d.getYValue().intValue() != 9)
+                        {
+                            int n = currentSim.getDataTranferMapXY().get(d.getXValue()).get(d.getYValue()).size();
+                            Tooltip tt = new Tooltip("Node "+d.getXValue().toString() + " sent to node " + d.getYValue().toString() + ", " + n + " times");
+                            tt.setShowDelay(Duration.millis(20));
+                            Tooltip.install(d.getNode(), tt);
+                        }
+                    }
+                }
+            }
+            else if (showing == 1)
+            {
+                for (XYChart.Series<Number, Number> s : chart.getData())
+                {
+                    for (XYChart.Data<Number, Number> d : s.getData())
+                    {
+                        if (d.getXValue().intValue() != 8)
+                        {
+                            int n = currentSim.getDataTranferMapXT().get(d.getXValue()).get(d.getYValue());
+                            Tooltip tt = new Tooltip("Node "+d.getXValue().toString() + " sent to node " + n + " at " + d.getYValue().toString());
+                            tt.setShowDelay(Duration.millis(20));
+                            Tooltip.install(d.getNode(), tt);
+                        }
+                    }
+                }
+            }
+            else if (showing == 2)
+            {
+                for (XYChart.Series<Number, Number> s : chart.getData())
+                {
+                    for (XYChart.Data<Number, Number> d : s.getData())
+                    {
+                        if (d.getXValue().intValue() != 9)
+                        {
+                            int n = currentSim.getDataTranferMapXT().get(d.getXValue()).get(d.getYValue());
+                            Tooltip tt = new Tooltip("Node "+d.getXValue().toString() + " received from node " + n + " at " + d.getYValue().toString());
+                            tt.setShowDelay(Duration.millis(20));
+                            Tooltip.install(d.getNode(), tt);
+                        }
+                    }
+                }
             }
         }
     }
@@ -887,6 +938,18 @@ public class SimController implements Initializable {
         }
         return folderName;
     }
+    
+    String browseFile()
+    {
+        String fileName = "";
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select GPS Chart Background Image");
+        File file = fileChooser.showOpenDialog((menuBar.getScene()).getWindow());
+        if (file != null) {
+            fileName = file.getAbsolutePath().strip();
+        }
+        return fileName;
+    }
 
     void saveSimDatatoDB(Simulation sim)
     {
@@ -918,29 +981,26 @@ public class SimController implements Initializable {
         }
     }
 
-    public void addDataCenterSeries(int algorithmNum)
+    public void addDataCenterSeries(Simulation sim)
     {
+        currentSim = sim;
         masterTabPane.getSelectionModel().select(dataCenterTab);
-        if (prevDTNAlgorithmNum != algorithmNum)
+        dataCenterChart.setTitle(sim.simName());
+        ArrayList<Boolean> al = sim.getDCCheckBoxTrack();
+        if (!dataCenterChart.getData().isEmpty())
         {
-            dataCenterChart.setTitle(algorithms[algorithmNum]);
-            ArrayList<Boolean> al = dcCheckBoxTrack.get(algorithms[algorithmNum]);
-            if (!dataCenterChart.getData().isEmpty())
-            {
-                dataCenterChart.getData().clear();
-            }
-            for (int i = 0; i < 7; i++)
-            {
-                dcCBDisPropList.get(i).set(dtnl.get((algorithmNum * 7) + i).getData().isEmpty());
-                if (al.get(i))
-                {
-                    dataCenterChart.getData().add(dtnl.get((algorithmNum*7)+i));
-                }
-            }
-            dataCenterChart.layout();
-            restoreDCCheckBoxStatus(algorithmNum, dtnl.get((algorithmNum*7)));
-            prevDTNAlgorithmNum = algorithmNum;
+            dataCenterChart.getData().clear();
         }
+        for (int i = 0; i < 7; i++)
+        {
+            dcCBDisPropList.get(i).set(sim.getDTNLog().get(i).getData().isEmpty());
+            if (al.get(i))
+            {
+                dataCenterChart.getData().add(sim.getDTNLog().get(i));
+            }
+        }
+        dataCenterChart.layout();
+        restoreDCCheckBoxStatus(sim);
     }
 
     public void addGPSLogSeries(Simulation sim)
@@ -953,7 +1013,7 @@ public class SimController implements Initializable {
         {
             gpsLogChart.getData().clear();
         }
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             glCBDisPropList.get(i).set(sim.getGPSLog().get(i).getData().isEmpty());
             if (al.get(i)) {
                 gpsLogChart.getData().add(sim.getGPSLog().get(i));
@@ -962,7 +1022,7 @@ public class SimController implements Initializable {
         restoreGLCheckBoxStatus(sim);
     }
 
-    public void restoreDCCheckBoxStatus(int algorithmNum, XYChart.Series dataSeries)
+    public void restoreDCCheckBoxStatus(Simulation sim)
     {
         //Clear all check boxes before restoring
         t1CBDC.setSelected(false);
@@ -972,7 +1032,8 @@ public class SimController implements Initializable {
         mhCBDC.setSelected(false);
         fhCBDC.setSelected(false);
         nfCBDC.setSelected(false);
-        ArrayList<Boolean> al = dcCheckBoxTrack.get(algorithms[algorithmNum]);
+        //Get the previously selected checkboxes list for new algorithm
+        ArrayList<Boolean> al = sim.getDCCheckBoxTrack();
         for(int i = 0; i < al.size(); i++)
         {
             if (!dcCBDisPropList.get(i).get())
@@ -1001,6 +1062,7 @@ public class SimController implements Initializable {
         mhCBGL.setSelected(false);
         fhCBGL.setSelected(false);
         nfCBGL.setSelected(false);
+        w1CBGL.setSelected(false);
         //Get the previously selected checkboxes list for new algorithm
         ArrayList<Boolean> al = sim.getGLCheckBoxTrack();
         //Set the checkbox based on the retrived list
@@ -1017,11 +1079,11 @@ public class SimController implements Initializable {
                     case 4 -> mhCBGL.setSelected(al.get(i));
                     case 5 -> fhCBGL.setSelected(al.get(i));
                     case 6 -> nfCBGL.setSelected(al.get(i));
+                    case 7 -> w1CBGL.setSelected(al.get(i));
                 }
             }
         }
     }
-
 
     void addLabelForThroughputBar(BarChart<String,Number> chart)
     {
@@ -1048,6 +1110,7 @@ public class SimController implements Initializable {
 
     public void addRCLSeriesYT(Simulation sim)
     {
+        showing = 2;
         currentSim = sim;
         masterTabPane.getSelectionModel().select(rclTab);
         radioContactLogChart.setTitle(sim.simName());
@@ -1065,6 +1128,7 @@ public class SimController implements Initializable {
     }
     public void addRCLSeriesXT(Simulation sim)
     {
+        showing = 1;
         currentSim = sim;
         masterTabPane.getSelectionModel().select(rclTab);
         radioContactLogChart.setTitle(sim.simName());
@@ -1082,6 +1146,7 @@ public class SimController implements Initializable {
     }
     public void addRCLSeriesXY(Simulation sim)
     {
+        showing = 0;
         currentSim = sim;
         /**
          * When showing XY chart no need for zoom as this only maximum 10x10 chart
@@ -1100,7 +1165,7 @@ public class SimController implements Initializable {
         rclYAxis.setLabel("Receiving Agent ID");
         rclYAxis.setLowerBound(0);
         rclYAxis.setUpperBound(10);
-        radioContactLogChart.setMouseTransparent(true);
+        radioContactLogChart.setMouseTransparent(false);
         rclYAxis.setAutoRanging(true);
         radioContactLogChart.layout();//to force redraw the data after adding.
         radioContactLogChart.getData().add(sim.getRClXYSeries());
@@ -1121,7 +1186,7 @@ public class SimController implements Initializable {
             gpsLiveChart.layout();//Keep this to force redraw the new series, else new series wont show up
         }
     }
-
+    
     void addGPSLiveDataTable(Simulation sim)
     {
         currentSim = sim;
@@ -1635,130 +1700,143 @@ public class SimController implements Initializable {
 
     @FXML
     private void showDataCenterCTH(ActionEvent event) {
-        addDataCenterSeries(0);
+        addDataCenterSeries(taskcth);
     }
 
     @FXML
     private void showDataCenterESC(ActionEvent event) {
-        addDataCenterSeries(1);
+        addDataCenterSeries(taskesc);
     }
 
     @FXML
     private void showDataCenterEMC(ActionEvent event) {
-        addDataCenterSeries(2);
+        addDataCenterSeries(taskemc);
     }
 
     @FXML
     private void showDataCenterEMT(ActionEvent event) {
-        addDataCenterSeries(3);
+        addDataCenterSeries(taskemt);
     }
 
     @FXML
     private void showDataCenterGTR(ActionEvent event) {
-        addDataCenterSeries(4);
+        addDataCenterSeries(taskgtr);
     }
 
     @FXML
     private void showDataCenterPR(ActionEvent event) {
-        addDataCenterSeries(5);
+        addDataCenterSeries(taskpr);
     }
 
     @FXML
     private void showDataCenterNPR(ActionEvent event) {
-        addDataCenterSeries(6);
+        addDataCenterSeries(tasknpr);
     }
 
     @FXML
     private void t1DCChecked(ActionEvent event) {
         if (t1CBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+0));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(0));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+0));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(0));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(0, t1CBDC.isSelected());
+        currentSim.getDCCheckBoxTrack().set(0, t1CBDC.isSelected());
     }
 
     @FXML
     private void t2DCChecked(ActionEvent event) {
         if (t2CBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+1));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(1));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+1));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(1));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(1, t2CBDC.isSelected());
+        currentSim.getDCCheckBoxTrack().set(1, t2CBDC.isSelected());
     }
 
     @FXML
     private void t3DCChecked(ActionEvent event) {
         if (t3CBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+2));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(2));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+2));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(2));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(2, t3CBDC.isSelected());
+        currentSim.getDCCheckBoxTrack().set(2, t3CBDC.isSelected());
     }
 
     @FXML
     private void bhDCChecked(ActionEvent event) {
         if (bhCBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+3));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(3));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+3));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(3));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(3, bhCBDC.isSelected());
+        currentSim.getDCCheckBoxTrack().set(3, bhCBDC.isSelected());
     }
 
     @FXML
     private void mhDCChecked(ActionEvent event) {
         if (mhCBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+4));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(4));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+4));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(4));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(4, mhCBDC.isSelected());
+        currentSim.getDCCheckBoxTrack().set(4, mhCBDC.isSelected());
     }
 
     @FXML
     private void fhDCChecked(ActionEvent event) {
         if (fhCBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+5));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(5));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+5));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(5));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(5, fhCBDC.isSelected());
+        currentSim.getDCCheckBoxTrack().set(5, fhCBDC.isSelected());
     }
 
     @FXML
     private void nfDCChecked(ActionEvent event) {
         if (nfCBDC.isSelected())
         {
-            dataCenterChart.getData().add(dtnl.get((prevDTNAlgorithmNum*7)+6));
+            dataCenterChart.getData().add(currentSim.getDTNLog().get(6));
         }
         else
         {
-            dataCenterChart.getData().remove(dtnl.get((prevDTNAlgorithmNum*7)+6));
+            dataCenterChart.getData().remove(currentSim.getDTNLog().get(6));
         }
-        dcCheckBoxTrack.get(algorithms[prevDTNAlgorithmNum]).set(6, nfCBGL.isSelected());
+        currentSim.getDCCheckBoxTrack().set(6, nfCBDC.isSelected());
     }
 
+    @FXML
+    private void w1GLChecked(ActionEvent event) {
+        if (w1CBGL.isSelected())
+        {
+            gpsLogChart.getData().add(currentSim.getGPSLog().get(7));
+        }
+        else
+        {
+            gpsLogChart.getData().remove(currentSim.getGPSLog().get(7));
+        }
+        currentSim.getGLCheckBoxTrack().set(7, w1CBGL.isSelected());
+    }
+    
     @FXML
     private void t1GLChecked(ActionEvent event) {
         if (t1CBGL.isSelected())
@@ -1874,6 +1952,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(taskcth);
                 generateRCLXTPopoutCharts(taskcth);
                 generateRCLYTPopoutCharts(taskcth);
+                generateGPSLogPopoutCharts(taskcth);
+                generateGPSLiveDataTablePopout(taskcth);
+                generateDCLogPopoutCharts(taskcth);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -1913,6 +1994,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(taskesc);
                 generateRCLXTPopoutCharts(taskesc);
                 generateRCLYTPopoutCharts(taskesc);
+                generateGPSLogPopoutCharts(taskesc);
+                generateGPSLiveDataTablePopout(taskesc);
+                generateDCLogPopoutCharts(taskesc);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -1952,6 +2036,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(taskemc);
                 generateRCLXTPopoutCharts(taskemc);
                 generateRCLYTPopoutCharts(taskemc);
+                generateGPSLiveDataTablePopout(taskemc);
+                generateGPSLogPopoutCharts(taskemc);
+                generateDCLogPopoutCharts(taskemc);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -1991,6 +2078,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(taskemt);
                 generateRCLXTPopoutCharts(taskemt);
                 generateRCLYTPopoutCharts(taskemt);
+                generateGPSLiveDataTablePopout(taskemt);
+                generateGPSLogPopoutCharts(taskemt);
+                generateDCLogPopoutCharts(taskemt);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -2030,6 +2120,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(taskgtr);
                 generateRCLXTPopoutCharts(taskgtr);
                 generateRCLYTPopoutCharts(taskgtr);
+                generateGPSLiveDataTablePopout(taskgtr);
+                generateGPSLogPopoutCharts(taskgtr);
+                generateDCLogPopoutCharts(taskgtr);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -2069,6 +2162,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(taskpr);
                 generateRCLXTPopoutCharts(taskpr);
                 generateRCLYTPopoutCharts(taskpr);
+                generateGPSLiveDataTablePopout(taskpr);
+                generateGPSLogPopoutCharts(taskpr);
+                generateDCLogPopoutCharts(taskpr);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -2108,6 +2204,9 @@ public class SimController implements Initializable {
                 generateRCLXYPopoutCharts(tasknpr);
                 generateRCLXTPopoutCharts(tasknpr);
                 generateRCLYTPopoutCharts(tasknpr);
+                generateGPSLiveDataTablePopout(tasknpr);
+                generateGPSLogPopoutCharts(tasknpr);
+                generateDCLogPopoutCharts(tasknpr);
                 masterTabPane.getSelectionModel().select(simStatusTab);
             }).start();
         }
@@ -2153,7 +2252,7 @@ public class SimController implements Initializable {
                 SnapshotParameters parameters = new SnapshotParameters();
                 if(darkTheme.isSelected())
                 {
-                    Color backgroundColor = Color.valueOf("#373e43");
+                    Color backgroundColor = Color.valueOf("#4E555A"); //https://convertingcolors.com/
                     parameters.setFill(backgroundColor);
                 }
                 WritableImage image = chart.snapshot(parameters, null);
@@ -2164,34 +2263,7 @@ public class SimController implements Initializable {
         {
             if (gpsLiveTab.isSelected() || rclTab.isSelected() || nodeDataTables.isSelected())
             {
-                if(currentSim.simName().contains("Capture"))
-                {
-                    pauseResumeCTHSim(new ActionEvent());
-                }
-                else if (currentSim.simName().contains("Single"))
-                {
-                    pauseResumeESCSim(new ActionEvent());
-                }
-                else if (currentSim.simName().contains("Multi"))
-                {
-                    pauseResumeEMCSim(new ActionEvent());
-                }
-                else if(currentSim.simName().contains("Expected"))
-                {
-                    pauseResumeEMTSim(new ActionEvent());
-                }
-                else if(currentSim.simName().contains("Game"))
-                {
-                    pauseResumeGTRSim(new ActionEvent());
-                }
-                else if(currentSim.simName().contains("New"))
-                {
-                    pauseResumeNPRSim(new ActionEvent());
-                }
-                else
-                {
-                    pauseResumePRSim(new ActionEvent());
-                }
+                pausePlaySpecificSim(currentSim);
             }
         }
     }
@@ -2250,14 +2322,15 @@ public class SimController implements Initializable {
 
     @FXML
     private void toggleCharts(ScrollEvent event) {
-        if (event.getDeltaY() > 0 )
+        //Disabled this feature not to interfere with the table scrolling in GPS Live Data Tables.
+        /*if (event.getDeltaY() > 0 )
         {
             masterTabPane.getSelectionModel().selectNext();
         }
         else if (event.getDeltaY() < 0)
         {
             masterTabPane.getSelectionModel().selectPrevious();
-        }
+        }*/
     }
 
     @FXML
@@ -2614,7 +2687,24 @@ public class SimController implements Initializable {
                 stage.setScene(scene);
                 stage.setResizable(true);
                 stage.show();
-                stage.setOnCloseRequest(e -> e.consume());
+                stage.setOnCloseRequest(e -> e.consume());stage.getScene().setOnKeyPressed(event -> 
+                {
+                    if (event.isControlDown() && event.getCode() == KeyCode.S)
+                    {
+                        SnapshotParameters parameters = new SnapshotParameters();
+                        if (darkTheme.isSelected())
+                        {
+                            Color backgroundColor = Color.valueOf("#373e43");
+                            parameters.setFill(backgroundColor);
+                        }
+                        WritableImage image = controller.getChart().snapshot(parameters, null);
+                        saveChartToImage(image);
+                    }
+                    else if(event.getCode() == KeyCode.P)
+                    {
+                        pausePlaySpecificSim(sim);
+                    }
+                });
                 popoutStages.get(sim.simName()).add(stage);
             });
         }
@@ -2650,6 +2740,24 @@ public class SimController implements Initializable {
                 stage.show();
                 stage.setOnCloseRequest(e -> e.consume());
                 stage.getScene().setOnKeyPressed(e -> controller.resetZoom(e));
+                stage.getScene().setOnKeyPressed(event -> 
+                {
+                    if (event.isControlDown() && event.getCode() == KeyCode.S)
+                    {
+                        SnapshotParameters parameters = new SnapshotParameters();
+                        if (darkTheme.isSelected())
+                        {
+                            Color backgroundColor = Color.valueOf("#373e43");
+                            parameters.setFill(backgroundColor);
+                        }
+                        WritableImage image = controller.getChart().snapshot(parameters, null);
+                        saveChartToImage(image);
+                    }
+                    else if(event.getCode() == KeyCode.P)
+                    {
+                        pausePlaySpecificSim(sim);
+                    }
+                });
                 popoutStages.get(sim.simName()).add(stage);
             });
         }
@@ -2685,6 +2793,161 @@ public class SimController implements Initializable {
                 stage.show();
                 stage.setOnCloseRequest(e -> e.consume());
                 stage.getScene().setOnKeyPressed(e -> controller.resetZoom(e));
+                stage.getScene().setOnKeyPressed(event -> 
+                {
+                    if (event.isControlDown() && event.getCode() == KeyCode.S)
+                    {
+                        SnapshotParameters parameters = new SnapshotParameters();
+                        if (darkTheme.isSelected())
+                        {
+                            Color backgroundColor = Color.valueOf("#373e43");
+                            parameters.setFill(backgroundColor);
+                        }
+                        WritableImage image = controller.getChart().snapshot(parameters, null);
+                        saveChartToImage(image);
+                    }
+                    else if(event.getCode() == KeyCode.P)
+                    {
+                        pausePlaySpecificSim(sim);
+                    }
+                });
+                popoutStages.get(sim.simName()).add(stage);
+            });
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(SimController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void generateGPSLogPopoutCharts(Simulation sim)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(SimController.class.getResource("/bucksimulator/ui/GPSLogData.fxml"));
+            Scene scene = new Scene(loader.load());
+            if (darkTheme.isSelected())
+            {
+                scene.getStylesheets().add(SimController.class.getResource("/bucksimulator/css/DarkTheme.css").toExternalForm());
+            }
+            else
+            {
+                scene.getStylesheets().add(SimController.class.getResource("/bucksimulator/css/NormalTheme.css").toExternalForm());
+            }
+            GPSLogDataController controller = loader.<GPSLogDataController>getController();
+            
+            Platform.runLater(() ->
+            {
+                controller.setData(sim);
+                Stage stage = new Stage();
+                stage.setTitle(sim.simName() + " GPS Log Chart");
+                stage.setScene(scene);
+                stage.setResizable(true);
+                stage.show();
+                stage.setOnCloseRequest(e -> e.consume());
+                stage.getScene().setOnKeyPressed(event -> 
+                {
+                    if (event.isControlDown() && event.getCode() == KeyCode.S)
+                    {
+                        SnapshotParameters parameters = new SnapshotParameters();
+                        if (darkTheme.isSelected())
+                        {
+                            Color backgroundColor = Color.valueOf("#373e43");
+                            parameters.setFill(backgroundColor);
+                        }
+                        WritableImage image = controller.getChart().snapshot(parameters, null);
+                        saveChartToImage(image);
+                    }
+                });
+                popoutStages.get(sim.simName()).add(stage);
+            });
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(SimController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void generateDCLogPopoutCharts(Simulation sim)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(SimController.class.getResource("/bucksimulator/ui/DCLogData.fxml"));
+            Scene scene = new Scene(loader.load());
+            if (darkTheme.isSelected())
+            {
+                scene.getStylesheets().add(SimController.class.getResource("/bucksimulator/css/DarkTheme.css").toExternalForm());
+            }
+            else
+            {
+                scene.getStylesheets().add(SimController.class.getResource("/bucksimulator/css/NormalTheme.css").toExternalForm());
+            }
+            DataCenterLogController controller = loader.<DataCenterLogController>getController();
+            
+            Platform.runLater(() ->
+            {
+                controller.setData(sim);
+                Stage stage = new Stage();
+                stage.setTitle(sim.simName() + " Datacenter Chart");
+                stage.setScene(scene);
+                stage.setResizable(true);
+                stage.show();
+                stage.setOnCloseRequest(e -> e.consume());
+                stage.getScene().setOnKeyPressed(event -> 
+                {
+                    if (event.isControlDown() && event.getCode() == KeyCode.S)
+                    {
+                        SnapshotParameters parameters = new SnapshotParameters();
+                        if (darkTheme.isSelected())
+                        {
+                            Color backgroundColor = Color.valueOf("#373e43");
+                            parameters.setFill(backgroundColor);
+                        }
+                        WritableImage image = controller.getChart().snapshot(parameters, null);
+                        saveChartToImage(image);
+                    }
+                });
+                popoutStages.get(sim.simName()).add(stage);
+            });
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(SimController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    void generateGPSLiveDataTablePopout(Simulation sim)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader(SimController.class.getResource("/bucksimulator/ui/GPSLiveDataTables.fxml"));
+            Scene scene = new Scene(loader.load());
+            if (darkTheme.isSelected())
+            {
+                scene.getStylesheets().add(SimController.class.getResource("/bucksimulator/css/DarkTheme.css").toExternalForm());
+            }
+            else
+            {
+                scene.getStylesheets().add(SimController.class.getResource("/bucksimulator/css/NormalTheme.css").toExternalForm());
+            }
+            GPSLiveDataTablesController controller = loader.<GPSLiveDataTablesController>getController();
+            
+            Platform.runLater(() ->
+            {
+                controller.setData(sim);
+                Stage stage = new Stage();
+                stage.setTitle(sim.simName() + " GPS Data");
+                stage.setScene(scene);
+                stage.setResizable(true);
+                stage.show();
+                stage.setOnCloseRequest(e -> e.consume());
+                stage.getScene().setOnKeyPressed(event -> 
+                {
+                    if(event.getCode() == KeyCode.P)
+                    {
+                        pausePlaySpecificSim(sim);
+                    }
+                });
                 popoutStages.get(sim.simName()).add(stage);
             });
         }
@@ -2788,7 +3051,7 @@ public class SimController implements Initializable {
     @FXML
     private void autoSaveSimDataToDB(ActionEvent event)
     {
-        if (autoSaveDBMI.isSelected())
+        if (autoSaveDBRB.isSelected())
         {
             taskcth.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(taskcth));
             taskesc.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(taskesc));
@@ -2810,5 +3073,57 @@ public class SimController implements Initializable {
             tasknpr.getSimCompletedProperty().removeListener(e -> saveSimDatatoDB(tasknpr));
             prefs.putBoolean(autoSave, false);
         }
+    }
+    
+    void pausePlaySpecificSim(Simulation sim)
+    {
+        if (sim.simName().contains("Capture"))
+        {
+            pauseResumeCTHSim(new ActionEvent());
+        }
+        else if (sim.simName().contains("Single"))
+        {
+            pauseResumeESCSim(new ActionEvent());
+        }
+        else if (sim.simName().contains("Multi"))
+        {
+            pauseResumeEMCSim(new ActionEvent());
+        }
+        else if (sim.simName().contains("Expected"))
+        {
+            pauseResumeEMTSim(new ActionEvent());
+        }
+        else if (sim.simName().contains("Game"))
+        {
+            pauseResumeGTRSim(new ActionEvent());
+        }
+        else if (sim.simName().contains("New"))
+        {
+            pauseResumeNPRSim(new ActionEvent());
+        }
+        else
+        {
+            pauseResumePRSim(new ActionEvent());
+        }
+    }
+
+    @FXML
+    private void browseGPSChartBackground(ActionEvent event)
+    {
+        String fileName = browseFile();
+        if(!fileName.isBlank())
+        {
+            String style = "-fx-background-image: url(\""+"file:"+ fileName +"\");";
+            gpsLiveChart.lookup(".chart-plot-background").setStyle(style);
+            gpsLogChart.lookup(".chart-plot-background").setStyle(style);
+            dataCenterChart.lookup(".chart-plot-background").setStyle(style);
+            chartBackgroundTF.setText(fileName);
+        }
+    }
+
+    @FXML
+    private void showPreferecesTab(ActionEvent event)
+    {
+        masterTabPane.getSelectionModel().select(preferencesTab);
     }
 }

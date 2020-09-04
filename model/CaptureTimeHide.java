@@ -71,9 +71,8 @@ public class CaptureTimeHide extends BaseSimulation{
     float[] storedhideeffort={1,1,1,1,1,1,1,1,1};
 
 
-    public CaptureTimeHide(ArrayList<XYChart.Series> dtnl)
+    public CaptureTimeHide()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("CTH",0);
         tps.setName("CTH");
         tpslc.setName("CTH");
@@ -1860,6 +1859,7 @@ public class CaptureTimeHide extends BaseSimulation{
                     clearFirstRCL = false;
                 }
                 });
+                showDataTransfer(sagentid, ragentid);
             }
         }
         else
@@ -1882,7 +1882,7 @@ public class CaptureTimeHide extends BaseSimulation{
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex)
                         {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1898,7 +1898,7 @@ public class CaptureTimeHide extends BaseSimulation{
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex)
                         {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1949,7 +1949,7 @@ public class CaptureTimeHide extends BaseSimulation{
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex)
                         {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1967,7 +1967,7 @@ public class CaptureTimeHide extends BaseSimulation{
 
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                         } catch (InterruptedException ex)
                         {
                             Logger.getLogger(CaptureTimeHide.class.getName()).log(Level.SEVERE, null, ex);
@@ -1989,8 +1989,11 @@ public class CaptureTimeHide extends BaseSimulation{
                         clearFirstRCL = false;
                     }
                 });
+                if(sagentid == 8 && ragentid == 9)
+                {
+                    showDataTransfer(8, 9);
+                }
             }
-
         }
 
     }

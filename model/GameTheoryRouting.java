@@ -5,7 +5,6 @@
  */
 package bucksimulator.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,9 +80,8 @@ public class GameTheoryRouting extends BaseSimulation
         700, 700, 700, 700, 700, 700, 700, 700, 700
     };
 
-    public GameTheoryRouting(ArrayList<XYChart.Series> dtnl)
+    public GameTheoryRouting()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("GTR", 0);
         tps.setName("GTR");
         tpslc.setName("GTR");
@@ -336,8 +334,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            t1Series.getData().clear();
-            t1Series.getData().add(new XYChart.Data(t1_x_coordinate - 0.5, t1_y_coordinate - 0.5));
+            t1Series.getData().add(new XYChart.Data(t1_x_coordinate-0.5,t1_y_coordinate-0.5));
+            t1Series.getData().remove(0);
         });
     }
 
@@ -543,8 +541,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            t2Series.getData().clear();
-            t2Series.getData().add(new XYChart.Data(t2_x_coordinate - 0.5, t2_y_coordinate - 0.5));
+            t2Series.getData().add(new XYChart.Data(t2_x_coordinate-0.5,t2_y_coordinate-0.5));
+            t2Series.getData().remove(0);
         });
     }
 
@@ -748,8 +746,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            t3Series.getData().clear();
-            t3Series.getData().add(new XYChart.Data(t3_x_coordinate - 0.5, t3_y_coordinate - 0.5));
+            t3Series.getData().add(new XYChart.Data(t3_x_coordinate-0.5,t3_y_coordinate-0.5));
+            t3Series.getData().remove(0);
         });
     }
 
@@ -962,8 +960,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            bhSeries.getData().clear();
-            bhSeries.getData().add(new XYChart.Data(bh_x_coordinate - 0.5, bh_y_coordinate - 0.5));
+            bhSeries.getData().add(new XYChart.Data(bh_x_coordinate-0.5,bh_y_coordinate-0.5));
+            bhSeries.getData().remove(0);
         });
     }
 
@@ -1184,8 +1182,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            mhSeries.getData().clear();
-            mhSeries.getData().add(new XYChart.Data(mh_x_coordinate - 0.5, mh_y_coordinate - 0.5));
+            mhSeries.getData().add(new XYChart.Data(mh_x_coordinate-0.5,mh_y_coordinate-0.5));
+            mhSeries.getData().remove(0);
         });
     }
 
@@ -1405,8 +1403,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            fhSeries.getData().clear();
-            fhSeries.getData().add(new XYChart.Data(fh_x_coordinate - 0.5, fh_y_coordinate - 0.5));
+            fhSeries.getData().add(new XYChart.Data(fh_x_coordinate-0.5,fh_y_coordinate-0.5));
+            fhSeries.getData().remove(0);
         });
     }
 
@@ -1627,8 +1625,8 @@ public class GameTheoryRouting extends BaseSimulation
         mapgridintolinearmem(sendingagentid);
         Platform.runLater(() ->
         {
-            nfSeries.getData().clear();
-            nfSeries.getData().add(new XYChart.Data(nf_x_coordinate - 0.5, nf_y_coordinate - 0.5));
+            nfSeries.getData().add(new XYChart.Data(nf_x_coordinate-0.5,nf_y_coordinate-0.5));
+            nfSeries.getData().remove(0);
         });
     }
 
@@ -2148,12 +2146,12 @@ public class GameTheoryRouting extends BaseSimulation
                         clearFirstRCL = false;
                     }
                 });
+                showDataTransfer(sagentid, ragentid);
             }
 
         }
         else
         {
-
             int[] sendmsg = new int[2000];
             int[] recvmsg = new int[3500];
             int key = 0;
@@ -2174,7 +2172,7 @@ public class GameTheoryRouting extends BaseSimulation
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2192,7 +2190,7 @@ public class GameTheoryRouting extends BaseSimulation
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2252,7 +2250,7 @@ public class GameTheoryRouting extends BaseSimulation
                         //System.out.printf("Some things is wrong with Push! \n");
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2271,7 +2269,7 @@ public class GameTheoryRouting extends BaseSimulation
 
                         try
                         {
-                            Thread.sleep(10000);
+                            Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2295,6 +2293,10 @@ public class GameTheoryRouting extends BaseSimulation
                         clearFirstRCL = false;
                     }
                 });
+                if(sagentid == 8 && ragentid == 9)
+                {
+                    showDataTransfer(8, 9);
+                }
             }
 
         }

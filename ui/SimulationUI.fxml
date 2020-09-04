@@ -256,8 +256,6 @@
             <Menu mnemonicParsing="false" onAction="#validatePreferences" text="Preferences">
               <items>
                   <RadioMenuItem fx:id="fullScreenMI" mnemonicParsing="false" onAction="#setFullScreen" text="Full Screen" />
-                  <RadioMenuItem fx:id="darkTheme" mnemonicParsing="false" onAction="#toggleTheme" text="Dark Theme" />
-                  <RadioMenuItem fx:id="autoSaveDBMI" mnemonicParsing="false" onAction="#autoSaveSimDataToDB" text="Auto Save Sim Data to DB" />
                   <Menu mnemonicParsing="false" text="Popout Charts">
                     <items>
                       <RadioMenuItem fx:id="popoutCTHChartsMI" mnemonicParsing="false" onAction="#popoutCTHCharts" text="Capture Time Hide" />
@@ -270,6 +268,7 @@
                         <CheckMenuItem fx:id="popoutAllChartsMI" mnemonicParsing="false" onAction="#popoutAllCharts" text="All" visible="false" />
                     </items>
                   </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#showPreferecesTab" text="User Preferences" />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -305,12 +304,12 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ScatterChart fx:id="gpsLiveChart" alternativeColumnFillVisible="true" animated="false" focusTraversable="true" prefHeight="431.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScatterChart fx:id="gpsLiveChart" alternativeColumnFillVisible="true" animated="false" cacheShape="false" focusTraversable="true" prefHeight="431.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" />
+                            <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="26.0" />
                           </xAxis>
                         <yAxis>
-                          <NumberAxis animated="false" autoRanging="false" layoutX="10.0" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+                          <NumberAxis animated="false" autoRanging="false" layoutX="10.0" minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="33.0" />
                         </yAxis>
                         </ScatterChart>
                      </children>
@@ -355,10 +354,10 @@
                      <children>
                         <ScatterChart fx:id="dataCenterChart" animated="false" prefHeight="441.0" prefWidth="634.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="5.0">
                           <xAxis>
-                            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" fx:id="xAxisDC" />
+                            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="26.0" fx:id="xAxisDC" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis fx:id="yAxisDC" autoRanging="false" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+                            <NumberAxis fx:id="yAxisDC" autoRanging="false" minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="33.0" />
                           </yAxis>
                         </ScatterChart>
                         <CheckBox fx:id="t1CBDC" layoutX="644.0" layoutY="30.0" mnemonicParsing="false" onAction="#t1DCChecked" pickOnBounds="false" snapToPixel="false" text="T1" AnchorPane.bottomAnchor="404.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0" />
@@ -378,12 +377,13 @@
                      <children>
                         <ScatterChart fx:id="gpsLogChart" animated="false" layoutX="14.0" layoutY="14.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="5.0">
                           <xAxis>
-                            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickUnit="1.0" upperBound="26.0" />
+                            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="26.0" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis autoRanging="false" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="33.0" />
+                            <NumberAxis autoRanging="false" minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="33.0" />
                           </yAxis>
                         </ScatterChart>
+                        <CheckBox fx:id="w1CBGL" mnemonicParsing="false" onAction="#w1GLChecked" text="W1" AnchorPane.bottomAnchor="175.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="240.0" />
                         <CheckBox fx:id="t1CBGL" layoutX="644.0" layoutY="30.0" mnemonicParsing="false" onAction="#t1GLChecked" pickOnBounds="false" snapToPixel="false" text="T1" AnchorPane.bottomAnchor="404.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0" />
                         <CheckBox fx:id="t2CBGL" layoutX="644.0" layoutY="60.0" mnemonicParsing="false" onAction="#t2GLChecked" pickOnBounds="false" snapToPixel="false" text="T2" AnchorPane.bottomAnchor="370.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0" />
                         <CheckBox fx:id="t3CBGL" layoutX="644.0" layoutY="90.0" mnemonicParsing="false" onAction="#t3GLChecked" pickOnBounds="false" snapToPixel="false" text="T3" AnchorPane.bottomAnchor="333.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="90.0" />
@@ -693,6 +693,18 @@
                         <Label layoutX="14.0" layoutY="198.0" text="New Prophet Routing" />
                         <Label fx:id="progressTextNPR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="198.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
                         <Label layoutX="241.0" layoutY="198.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab fx:id="preferencesTab" text="Preferences Tab">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="chartBackgroundTF" editable="false" minWidth="375.0" prefHeight="25.0" prefWidth="375.0" promptText="Browse Chart Background Image" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+                        <Button layoutX="442.0" layoutY="20.0" mnemonicParsing="false" onAction="#browseGPSChartBackground" text="Browse" AnchorPane.leftAnchor="442.0" AnchorPane.topAnchor="20.0" />
+                        <RadioButton fx:id="autoSaveDBRB" layoutX="21.0" layoutY="116.0" mnemonicParsing="false" onAction="#autoSaveSimDataToDB" text="Auto Save Sim Data to DB" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="60.0" />
+                        <RadioButton fx:id="darkTheme" mnemonicParsing="false" onAction="#toggleTheme" text="Dark Theme" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="100.0" />
                      </children>
                   </AnchorPane>
               </content>

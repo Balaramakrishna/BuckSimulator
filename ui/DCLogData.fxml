@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="rclAnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bucksimulator.controller.DataCenterLogController">
+<children>
+    <ScatterChart fx:id="dataCenterChart" animated="false" prefHeight="441.0" prefWidth="634.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="61.0" AnchorPane.topAnchor="5.0">
+        <xAxis>
+            <NumberAxis autoRanging="false" minorTickVisible="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="26.0" fx:id="xAxisDC" />
+        </xAxis>
+        <yAxis>
+            <NumberAxis fx:id="yAxisDC" autoRanging="false" minorTickVisible="false" side="LEFT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="1.0" upperBound="33.0" />
+        </yAxis>
+    </ScatterChart>
+    <CheckBox fx:id="t1CBDC" layoutX="644.0" layoutY="30.0" mnemonicParsing="false" onAction="#t1DCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="T1" AnchorPane.bottomAnchor="404.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0" />
+    <CheckBox fx:id="t2CBDC" layoutX="644.0" layoutY="60.0" mnemonicParsing="false" onAction="#t2DCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="T2" AnchorPane.bottomAnchor="370.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0" />
+    <CheckBox fx:id="t3CBDC" layoutX="644.0" layoutY="90.0" mnemonicParsing="false" onAction="#t3DCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="T3" AnchorPane.bottomAnchor="333.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="90.0" />
+    <CheckBox fx:id="bhCBDC" layoutX="644.0" layoutY="120.0" mnemonicParsing="false" onAction="#bhDCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="BH" AnchorPane.bottomAnchor="298.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="120.0" />
+    <CheckBox fx:id="mhCBDC" layoutX="643.0" layoutY="150.0" mnemonicParsing="false" onAction="#mhDCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="MH" AnchorPane.bottomAnchor="268.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="150.0" />
+    <CheckBox fx:id="fhCBDC" layoutX="644.0" layoutY="180.0" mnemonicParsing="false" onAction="#fhDCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="FH" AnchorPane.bottomAnchor="239.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="180.0" />
+    <CheckBox fx:id="nfCBDC" layoutX="644.0" layoutY="210.0" mnemonicParsing="false" onAction="#nfDCChecked" pickOnBounds="false" selected="true" snapToPixel="false" text="NF" AnchorPane.bottomAnchor="204.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="210.0" />
+</children>
+</AnchorPane>

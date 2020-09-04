@@ -7,7 +7,6 @@ package bucksimulator.model;
 
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,9 +83,8 @@ public class ProphetRouting extends BaseSimulation
     float[][] ptransitive = new float[8][8];
 
 
-    public ProphetRouting(ArrayList<XYChart.Series> dtnl)
+    public ProphetRouting()
     {
-        super(dtnl);
         rcrSeries = new XYChart.Data("PR", 0);
         tps.setName("PR");
         tpslc.setName("PR");
@@ -2537,7 +2535,7 @@ public class ProphetRouting extends BaseSimulation
 				{
 					//System.out.printf("****************************************************************\n");
 					//System.out.printf("CONTACT receivingagentprobability %lf \n",receivingagentprobability);
-					//System.out.push(sendingagentid,index+1);
+					push(sendingagentid,index+1, 0.0f);
 				}
 			}
 		}
@@ -2673,6 +2671,7 @@ public class ProphetRouting extends BaseSimulation
                     clearFirstRCL = false;
                 }
             });
+            showDataTransfer(sagentid, ragentid);
         }
         else
         {
@@ -2687,7 +2686,7 @@ public class ProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2704,7 +2703,7 @@ public class ProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2752,7 +2751,7 @@ public class ProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2770,7 +2769,7 @@ public class ProphetRouting extends BaseSimulation
                     //System.out.printf("Some things is wrong with Push! \n");
                     try
                     {
-                        Thread.sleep(10000);
+                        Thread.sleep(1);
                     }
                     catch (InterruptedException ex)
                     {
@@ -2792,9 +2791,11 @@ public class ProphetRouting extends BaseSimulation
                     clearFirstRCL = false;
                 }
             });
-
+            if(sagentid == 8 && ragentid == 9)
+            {
+                showDataTransfer(8, 9);
+            }
         }
-
     }
 
     @Override

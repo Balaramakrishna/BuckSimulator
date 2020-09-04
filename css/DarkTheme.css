@@ -153,9 +153,54 @@
     -fx-shape: "";
 }
 .default-color7.chart-symbol { /* hollow diamond */
-    -fx-background-color: #f71da1;
+    -fx-background-color: #12e0e0;
     -fx-background-radius: 5px;
     -fx-padding: 5px;
     -fx-shape: "";
 }
+.series8.chart-symbol { /* hollow diamond */
+    -fx-background-color: #ffbbff;
+    /*-fx-background-insets: 0, 2;*/
+    -fx-background-radius: 1px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
 
+.bulge-symbol-sending {
+    -fx-scale-x: 3;
+    -fx-scale-y: 3;
+}
+.bulge-symbol-receiving {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+/*.onHover{
+    -fx-background-color: ORANGE;
+}*/
+.default-color0.chart-bar { -fx-bar-fill: #f51708; }
+.default-color1.chart-bar { -fx-bar-fill: #ec7b0a; }
+.default-color2.chart-bar { -fx-bar-fill: #f6e808; }
+.default-color3.chart-bar { -fx-bar-fill: #62d807; }
+.default-color4.chart-bar { -fx-bar-fill: white; }
+.default-color5.chart-bar { -fx-bar-fill: #1d86f7; }
+.default-color6.chart-bar { -fx-bar-fill: #bb81cb; }
+.default-color7.chart-bar { -fx-bar-fill: #12e0e0; }
+
+.default-color0.chart-line-symbol { -fx-background-color: #f51708, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #ec7b0a, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #f6e808, white; }
+.default-color3.chart-line-symbol { -fx-background-color: #62d807, white; }
+.default-color4.chart-line-symbol { -fx-background-color: white, white; }
+.default-color5.chart-line-symbol { -fx-background-color: #1d86f7, white; }
+.default-color6.chart-line-symbol { -fx-background-color: #bb81cb, white; }
+.default-color7.chart-line-symbol { -fx-background-color: #12e0e0, white; }
+.default-color0.chart-series-line { -fx-stroke: #f51708; }
+.default-color1.chart-series-line { -fx-stroke: #ec7b0a; }
+.default-color2.chart-series-line { -fx-stroke: #f6e808; }
+.default-color3.chart-series-line { -fx-stroke: #62d807; }
+.default-color4.chart-series-line { -fx-stroke: white; }
+.default-color5.chart-series-line { -fx-stroke: #1d86f7; }
+.default-color6.chart-series-line { -fx-stroke: #bb81cb; }
+.default-color7.chart-series-line { -fx-stroke: #12e0e0; }
