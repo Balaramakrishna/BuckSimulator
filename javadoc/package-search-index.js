@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"bucksimulator.controller"},{"l":"bucksimulator.model"},{"l":"bucksimulator.ui"}]
