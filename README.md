@@ -1,4 +1,5 @@
 # BuckSimulator
+![Buck Simulator Splash](/images/Splash.gif)
 Based on : http://shodhganga.inflibnet.ac.in:8080/jspui/handle/10603/56573  
 Credits: Laveen Vikram Sundararaj  (https://www.linkedin.com/in/laveen-sundararaj-ph-d-142066bb).  
 Migrated to Java by: Balaramakrishna (https://www.linkedin.com/in/balaramakrishna-rachumallu/)  
@@ -9,3 +10,12 @@ Java is selected for the path forward and the C code is migrated to Java without
 JavaFx is used on top of the migrated code base to provide the various visualisations.
 
 Documentation for the source code is available at https://balaramakrishna.github.io/BuckSimulator/
+  
+Simulator Demo
+![Demo 1](/images/Sim1.gif)
+  
+![Demo 2](/images/Sim2.gif)
+  
+![Demo 3](/images/Sim3.gif)
+  
+![Demo 4](/images/Sim4.gif)
