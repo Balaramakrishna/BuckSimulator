@@ -7,3 +7,5 @@ Bucksimulator is a reaserch project developed by Laveen Vikram Sundararaj during
 The original simulator is developed using C programming language and now with development of many technologies we have decided to bring new life into the simulator.
 Java is selected for the path forward and the C code is migrated to Java without distrubbing the orogianl flavor.
 JavaFx is used on top of the migrated code base to provide the various visualisations.
+
+Documentation for the source code is available at https://balaramakrishna.github.io/BuckSimulator/
