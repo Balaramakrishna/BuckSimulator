@@ -1,0 +1,205 @@
+.root { 
+    -fx-accent: #1e74c6;
+    -fx-focus-color: -fx-accent;
+    -fx-base: #373e43;
+    -fx-control-inner-background: derive(-fx-base, 35%);
+}
+
+.label{
+    -fx-text-fill: white;
+}
+
+.label1{
+    -fx-text-fill: #4cae0f;
+}
+
+.text-field {
+    -fx-prompt-text-fill: gray;
+}
+
+.titulo{
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+.button{
+    -fx-focus-traversable: false;
+}
+
+.button:hover{
+    -fx-text-fill: white;
+}
+
+.separator *.line { 
+    -fx-background-color: #3C3C3C;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
+}
+
+.scroll-bar{
+    -fx-background-color: derive(-fx-base,45%)
+}
+
+.button:default {
+    -fx-base: -fx-accent ;
+} 
+
+.tree-table-view,
+.table-view{
+    -fx-selection-bar-non-focused: steelblue;
+    -fx-selection-bar: steelblue;
+}
+
+.table-view .column-header .label{
+    -fx-font-weight: none;
+}
+
+.tree-table-row-cell:even,
+.table-row-cell:even{
+    -fx-control-inner-background: derive(-fx-base, 55%);
+}
+.tree-table-row-cell:odd,
+.table-row-cell:odd{    
+    -fx-control-inner-background: derive(-fx-base, 35%);
+}
+
+.table-row-cell:empty {
+    -fx-background-color: transparent;
+}
+
+.tree-table-cell{
+    -fx-text-fill: white;
+}
+.table-view .table-cell{
+    -fx-text-fill: white;
+}
+
+.tab-pane{
+    -fx-tab-max-height:0;
+}
+.tab-pane .tab-header-area{
+    visibility:hidden;
+    -fx-padding: 0 0 0 0;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #999999;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #999999;
+}
+.chart-vertical-zero-line {
+    -fx-stroke: #999999;
+}
+.chart-horizontal-zero-line {
+    -fx-stroke: #999999;
+}
+.chart-title {
+  -fx-font-size: 1em;
+}
+.pane-background {
+    -fx-background-image: url("/bucksimulator/images/StartScreenBG.png");
+    -fx-background-size: stretch;
+    -fx-opacity: 0.25;
+    -fx-padding: 0 0 0 0;
+}
+.check-box .box {
+    -fx-background-color: grey;
+    -fx-border-color:white;
+    -fx-border-radius:1px; 
+
+}
+.default-color0.chart-symbol { /* solid circle */
+    -fx-background-color: #f51708;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color1.chart-symbol { /* solid square */
+    -fx-background-color: #ec7b0a;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color2.chart-symbol { /* solid diamond */
+    -fx-background-color: #f6e808;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color3.chart-symbol { /* cross */
+    -fx-background-color: #62d807;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color4.chart-symbol { /* solid triangle */
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color5.chart-symbol { /* hollow circle */
+    -fx-background-color: #1d86f7;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color6.chart-symbol { /* hollow square */
+    -fx-background-color: #bb81cb;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.default-color7.chart-symbol { /* hollow diamond */
+    -fx-background-color: #12e0e0;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+}
+.series8.chart-symbol { /* hollow diamond */
+    -fx-background-color: #ffbbff;
+    /*-fx-background-insets: 0, 2;*/
+    -fx-background-radius: 1px;
+    -fx-padding: 5px;
+    -fx-shape: "";
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+
+.bulge-symbol-sending {
+    -fx-scale-x: 3;
+    -fx-scale-y: 3;
+}
+.bulge-symbol-receiving {
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+}
+/*.onHover{
+    -fx-background-color: ORANGE;
+}*/
+.default-color0.chart-bar { -fx-bar-fill: #f51708; }
+.default-color1.chart-bar { -fx-bar-fill: #ec7b0a; }
+.default-color2.chart-bar { -fx-bar-fill: #f6e808; }
+.default-color3.chart-bar { -fx-bar-fill: #62d807; }
+.default-color4.chart-bar { -fx-bar-fill: white; }
+.default-color5.chart-bar { -fx-bar-fill: #1d86f7; }
+.default-color6.chart-bar { -fx-bar-fill: #bb81cb; }
+.default-color7.chart-bar { -fx-bar-fill: #12e0e0; }
+
+.default-color0.chart-line-symbol { -fx-background-color: #f51708, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #ec7b0a, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #f6e808, white; }
+.default-color3.chart-line-symbol { -fx-background-color: #62d807, white; }
+.default-color4.chart-line-symbol { -fx-background-color: white, white; }
+.default-color5.chart-line-symbol { -fx-background-color: #1d86f7, white; }
+.default-color6.chart-line-symbol { -fx-background-color: #bb81cb, white; }
+.default-color7.chart-line-symbol { -fx-background-color: #12e0e0, white; }
+.default-color0.chart-series-line { -fx-stroke: #f51708; }
+.default-color1.chart-series-line { -fx-stroke: #ec7b0a; }
+.default-color2.chart-series-line { -fx-stroke: #f6e808; }
+.default-color3.chart-series-line { -fx-stroke: #62d807; }
+.default-color4.chart-series-line { -fx-stroke: white; }
+.default-color5.chart-series-line { -fx-stroke: #1d86f7; }
+.default-color6.chart-series-line { -fx-stroke: #bb81cb; }
+.default-color7.chart-series-line { -fx-stroke: #12e0e0; }
