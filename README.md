@@ -1,5 +1,7 @@
 # BuckSimulator
 ![Buck Simulator Splash](/images/Splash.gif)
+  
+  
 Based on : http://shodhganga.inflibnet.ac.in:8080/jspui/handle/10603/56573  
 Migrated to Java by: Balaramakrishna (https://www.linkedin.com/in/balaramakrishna-rachumallu/)  
 Credits: Laveen Vikram Sundararaj  (https://www.linkedin.com/in/laveen-sundararaj-ph-d-142066bb).  
