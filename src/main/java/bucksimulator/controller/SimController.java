@@ -802,11 +802,34 @@ public class SimController implements Initializable {
                         taskpr.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(taskpr));
                         tasknpr.getSimCompletedProperty().addListener(e -> saveSimDatatoDB(tasknpr));
                     }
+                    registerNotifications();
                 });
                return "";
             }
         };
         new Thread(task).start();
+    }
+    
+    public void registerNotifications()
+    {
+        for(Simulation sim:simulations)
+        {
+            sim.getSimCompletedProperty().addListener(e ->
+            {
+                if(sim.getSimCompletedProperty().get())
+                {
+                    showPopupMessage(sim.simName()+" Simulation Completed",(Stage) menuBar.getScene().getWindow());
+                }
+            });
+            sim.getSimStartedProperty().addListener(e ->
+            {
+                if(sim.getSimStartedProperty().get())
+                {
+                    showPopupMessage(sim.simName()+" Simulation Started",(Stage) menuBar.getScene().getWindow());
+                }
+            });
+            
+        }
     }
     
     /**
@@ -1435,7 +1458,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(taskcth);
         t1 = new Thread(taskcth);
         t1.start();
-        showPopupMessage("Capture Time Hide Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML
@@ -1443,7 +1465,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(taskemc);
         t3 = new Thread(taskemc);
         t3.start();
-        showPopupMessage("Epedemic Multicopy Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML
@@ -1451,7 +1472,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(taskesc);
         t2 = new Thread(taskesc);
         t2.start();
-        showPopupMessage("Epedemic Singlecopy Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML
@@ -1459,7 +1479,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(taskemt);
         t4 = new Thread(taskemt);
         t4.start();
-        showPopupMessage("Expected Meetingtime Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML
@@ -1467,7 +1486,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(taskgtr);
         t5 = new Thread(taskgtr);
         t5.start();
-        showPopupMessage("Game Theory Routing Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML
@@ -1475,7 +1493,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(taskpr);
         t6 = new Thread(taskpr);
         t6.start();
-        showPopupMessage("Prophet Routing Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML
@@ -1483,7 +1500,6 @@ public class SimController implements Initializable {
         addGPSLiveSeries(tasknpr);
         t7 = new Thread(tasknpr);
         t7.start();
-        showPopupMessage("New Prophet Routing Simulation Started",(Stage) menuBar.getScene().getWindow());
     }
 
     @FXML

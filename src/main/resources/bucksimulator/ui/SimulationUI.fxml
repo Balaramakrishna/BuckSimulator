@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import javafx.scene.chart.*?>
@@ -672,27 +673,62 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="14.0" layoutY="17.0" text="Capture Time Hide" />
-                        <Label fx:id="progressTextCTH" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="17.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="17.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
-                        <Label layoutX="14.0" layoutY="48.0" text="Epedemic Single Copy" />
-                        <Label fx:id="progressTextESC" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="48.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="48.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
-                        <Label layoutX="14.0" layoutY="78.0" text="Epedemic Multi Copy" />
-                        <Label fx:id="progressTextEMC" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="78.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="78.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
-                        <Label layoutX="14.0" layoutY="108.0" text="Expected Meeting Time" />
-                        <Label fx:id="progressTextEMT" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="108.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="108.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
-                        <Label layoutX="14.0" layoutY="138.0" text="Game Theory Routing" />
-                        <Label fx:id="progressTextGTR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="138.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="138.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
-                        <Label layoutX="14.0" layoutY="168.0" text="Prophet Routing" />
-                        <Label fx:id="progressTextPR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="168.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="168.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
-                        <Label layoutX="14.0" layoutY="198.0" text="New Prophet Routing" />
-                        <Label fx:id="progressTextNPR" alignment="CENTER_RIGHT" layoutX="167.0" layoutY="198.0" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
-                        <Label layoutX="241.0" layoutY="198.0" prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                        <VBox alignment="TOP_CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Capture Time Hide       " />
+                                    <Label fx:id="progressTextCTH" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Epedemic Single Copy " />
+                                    <Label fx:id="progressTextESC" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Epedemic Multi Copy    " />
+                                    <Label fx:id="progressTextEMC" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Expected Meeting Time" />
+                                    <Label fx:id="progressTextEMT" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Game Theory Routing  " />
+                                    <Label fx:id="progressTextGTR" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="Prophet Routing           " />
+                                    <Label fx:id="progressTextPR" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Label text="New Prophet Routing   " />
+                                    <Label fx:id="progressTextNPR" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="75.0" text="0" textAlignment="JUSTIFY" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="/120960" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                        </VBox>
                      </children>
                   </AnchorPane>
               </content>
@@ -701,10 +737,29 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="chartBackgroundTF" editable="false" minWidth="375.0" prefHeight="25.0" prefWidth="375.0" promptText="Browse Chart Background Image" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-                        <Button layoutX="442.0" layoutY="20.0" mnemonicParsing="false" onAction="#browseGPSChartBackground" text="Browse" AnchorPane.leftAnchor="442.0" AnchorPane.topAnchor="20.0" />
-                        <RadioButton fx:id="autoSaveDBRB" layoutX="21.0" layoutY="116.0" mnemonicParsing="false" onAction="#autoSaveSimDataToDB" text="Auto Save Sim Data to DB" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="60.0" />
-                        <RadioButton fx:id="darkTheme" mnemonicParsing="false" onAction="#toggleTheme" text="Dark Theme" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="100.0" />
+                        <VBox alignment="TOP_CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox alignment="CENTER" spacing="20.0">
+                                 <children>
+                                    <TextField fx:id="chartBackgroundTF" editable="false" minWidth="375.0" prefHeight="25.0" prefWidth="375.0" promptText="Browse Chart Background Image" />
+                                    <Button mnemonicParsing="false" onAction="#browseGPSChartBackground" text="Browse" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <RadioButton fx:id="autoSaveDBRB" mnemonicParsing="false" onAction="#autoSaveSimDataToDB" text="Auto Save Sim Data to DB" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <RadioButton fx:id="darkTheme" mnemonicParsing="false" onAction="#toggleTheme" text="Dark Theme" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets top="20.0" />
+                           </padding>
+                        </VBox>
                      </children>
                   </AnchorPane>
               </content>
